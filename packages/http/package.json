@@ -1,0 +1,29 @@
+{
+  "name": "@nextastic/http",
+  "version": "0.0.1",
+  "description": "Strongly typed http helpers for client, and server.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nextastic/nextastic.git",
+    "directory": "packages/http"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "mikewuu",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

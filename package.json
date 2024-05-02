@@ -1,0 +1,19 @@
+{
+  "name": "root",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "build": "turbo build"
+  },
+  "workspaces": [
+    "packages/*",
+    "boilerplates/*"
+  ],
+  "author": "mikewuu",
+  "license": "MIT",
+  "devDependencies": {
+    "turbo": "^1.13.3"
+  }
+}
