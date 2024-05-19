@@ -18,8 +18,8 @@ importers:
   boilerplates/aws:
     dependencies:
       '@nextastic/http':
-        specifier: 1.0.2
-        version: 1.0.2(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+        specifier: 1.0.4
+        version: 1.0.4(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(zod@3.23.8)
       next:
         specifier: 14.2.3
         version: 14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -262,10 +262,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@nextastic/http@1.0.2':
-    resolution: {integrity: sha512-muOoyCRNsGWTnC38xCgJtEdWWrE4uyYSlc1kWfNxLQdl2or0Y6q6GBKKuusoU+BFQuKnTBF/OqREEIQHKLUvLw==}
+  '@nextastic/http@1.0.4':
+    resolution: {integrity: sha512-wtHSja6k98pQtOZQOmhwADeN6oVp6r/nXOSweUwWNLW3m1iRsfhTThrkz2SMbeI9VtzQmL15enN1kBXo12wbpw==}
     peerDependencies:
       next: 14.2.3
+      zod: ^3.23.8
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -2386,7 +2387,7 @@ snapshots:
   '@next/swc-win32-x64-msvc@14.2.3':
     optional: true
 
-  '@nextastic/http@1.0.2(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))':
+  '@nextastic/http@1.0.4(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(zod@3.23.8)':
     dependencies:
       next: 14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       zod: 3.23.8
