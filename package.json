@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "build": "turbo build",
-    "release": "pnpm build && changeset publish"
+    "release": "pnpm build && changeset publish --access public"
   },
   "workspaces": [
     "packages/*",
