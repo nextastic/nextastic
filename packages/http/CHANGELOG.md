@@ -1,5 +1,11 @@
 # @nextastic/http
 
+## 1.0.4
+
+### Patch Changes
+
+- 28b5452: Fix zod cast not working
+
 ## 1.0.3
 
 ### Patch Changes
