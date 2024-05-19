@@ -1,5 +1,16 @@
 # aws
 
+## 0.2.0
+
+### Minor Changes
+
+- 5a89d2e: Add sample route and client call'
+
+### Patch Changes
+
+- Updated dependencies [5a89d2e]
+  - @nextastic/http@1.0.3
+
 ## 0.1.3
 
 ### Patch Changes
