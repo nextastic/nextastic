@@ -1,3 +1,2 @@
-export const createRoute = () => {
-  console.log('hi')
-}
+export * from './client'
+export * from './server'
