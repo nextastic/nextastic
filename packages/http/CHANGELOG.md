@@ -1,5 +1,11 @@
 # @nextastic/http
 
+## 1.0.2
+
+### Patch Changes
+
+- 4908cd4: Bump remove old dist
+
 ## 1.0.1
 
 ### Patch Changes

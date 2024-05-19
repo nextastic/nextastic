@@ -1,5 +1,13 @@
 # aws
 
+## 0.1.3
+
+### Patch Changes
+
+- 4908cd4: Remove test createRoute
+- Updated dependencies [4908cd4]
+  - @nextastic/http@1.0.2
+
 ## 0.1.2
 
 ### Patch Changes
