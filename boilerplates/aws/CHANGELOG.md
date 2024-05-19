@@ -1,5 +1,12 @@
 # aws
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [28b5452]
+  - @nextastic/http@1.0.4
+
 ## 0.2.0
 
 ### Minor Changes
