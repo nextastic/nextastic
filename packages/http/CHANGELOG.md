@@ -1,5 +1,11 @@
 # @nextastic/http
 
+## 1.0.1
+
+### Patch Changes
+
+- 0f4aed8: Fix missing exports
+
 ## 1.0.0
 
 ### Major Changes
