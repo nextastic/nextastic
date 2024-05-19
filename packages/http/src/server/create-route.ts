@@ -78,7 +78,7 @@ export function createRoute<
         jsonBody.parse(await response.clone().json()) // Clone to avoid already read response error
         return response as unknown as NextResponse<TResponse>
       } catch (error: unknown) {
-        if (error instanceof ZodError) {
+        if (isZodError(error)) {
           throw new InternalServerErrorException({
             type: 'unknown_response',
             message: createZodErrorMessage(error),
@@ -110,7 +110,7 @@ async function parseBody<TBodyParams extends z.AnyZodObject>(
 
     return bodyParams.parse(data)
   } catch (error: unknown) {
-    if (error instanceof ZodError) {
+    if (isZodError(error)) {
       throw new BadRequestException({
         type: 'invalid_data',
         message: createZodErrorMessage(error),
@@ -179,7 +179,7 @@ async function parseQuery<TQueryParams extends z.AnyZodObject>(
   try {
     return queryParmas.parse(contextParams)
   } catch (error: unknown) {
-    if (error instanceof ZodError) {
+    if (isZodError(error)) {
       throw new NotFoundException({
         type: 'missing_query_param',
         message: createZodErrorMessage(error),
@@ -202,7 +202,7 @@ async function parseRouteParams<TRouteParams extends z.AnyZodObject>(
   try {
     return routeParams.parse(contextParams)
   } catch (error: unknown) {
-    if (error instanceof ZodError) {
+    if (isZodError(error)) {
       throw new NotFoundException({
         type: 'missing_route_param',
         message: createZodErrorMessage(error),
@@ -212,4 +212,20 @@ async function parseRouteParams<TRouteParams extends z.AnyZodObject>(
 
     throw error
   }
+}
+
+function isZodError(error: unknown): error is ZodError {
+  if (typeof error !== 'object') {
+    return false
+  }
+
+  if (!error) {
+    return false
+  }
+
+  if (!('constructor' in error)) {
+    return false
+  }
+
+  return error.constructor.name === 'ZodError' && 'issues' in error
 }
