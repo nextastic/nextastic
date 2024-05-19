@@ -23,13 +23,11 @@
   "files": [
     "dist"
   ],
-  "dependencies": {
-    "zod": "^3.23.8"
-  },
   "devDependencies": {
     "typescript": "^5.4.5"
   },
   "peerDependencies": {
-    "next": "14.2.3"
+    "next": "14.2.3",
+    "zod": "^3.23.8"
   }
 }
