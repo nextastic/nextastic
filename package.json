@@ -5,7 +5,8 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "build": "turbo build"
+    "build": "turbo build",
+    "prepare": "build"
   },
   "workspaces": [
     "packages/*",
