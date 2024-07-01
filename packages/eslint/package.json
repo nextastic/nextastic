@@ -1,7 +1,7 @@
 {
   "name": "@nextastic/eslint",
-  "version": "0.1.0",
-  "description": "ESLint config wit hdefaults",
+  "version": "0.2.0",
+  "description": "ESLint config with Nextastic defaults",
   "repository": {
     "type": "git",
     "url": "https://github.com/nextastic/nextastic.git",
