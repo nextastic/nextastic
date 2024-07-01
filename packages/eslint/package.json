@@ -1,0 +1,23 @@
+{
+  "name": "@nextastic/eslint",
+  "version": "0.1.0",
+  "description": "ESLint config wit hdefaults",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nextastic/nextastic.git",
+    "directory": "packages/eslint"
+  },
+  "scripts": {},
+  "author": "mikewuu",
+  "license": "MIT",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  },
+  "peerDependencies": {
+    "eslint": ">= 8"
+  }
+}
