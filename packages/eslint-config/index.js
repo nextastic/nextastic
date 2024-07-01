@@ -1,5 +1,5 @@
 // index.js
-export default {
+module.exports = {
   extends: ['next/core-web-vitals', 'plugin:jest/recommended'],
   plugins: ['@typescript-eslint/eslint-plugin', 'jest'],
   rules: {

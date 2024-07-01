@@ -1,6 +1,6 @@
 {
-  "name": "@nextastic/eslint",
-  "version": "0.2.0",
+  "name": "@nextastic/eslint-config",
+  "version": "0.0.0",
   "description": "ESLint config with Nextastic defaults",
   "repository": {
     "type": "git",
@@ -19,5 +19,8 @@
   },
   "peerDependencies": {
     "eslint": ">= 8"
+  },
+  "dependencies": {
+    "eslint-plugin-jest": "^28.6.0"
   }
 }
