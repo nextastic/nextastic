@@ -1,5 +1,12 @@
 # @nextastic/eslint
 
+## 1.1.0
+
+### Minor Changes
+
+- 0801f2c: fix missing typescript-eslint
+- Add typescript parser
+
 ## 1.0.0
 
 ### Major Changes
