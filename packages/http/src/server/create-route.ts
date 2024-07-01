@@ -27,6 +27,7 @@ export function createRoute<
         ? FormData
         : z.infer<TBody>
       : null
+    headers: NextRequest['headers']
     cookies: NextRequest['cookies']
     nextUrl: NextRequest['nextUrl']
     query: TQuery extends z.AnyZodObject ? z.infer<TQuery> : null
@@ -59,34 +60,51 @@ export function createRoute<
         params
       )) as any
 
-      const response = await handleRequest({
-        body,
-        cookies: request.cookies,
-        nextUrl: request.nextUrl,
-        query,
-        routeParams,
-      })
-
-      const jsonBody = config.response as z.AnyZodObject | undefined
-      if (!jsonBody) {
-        return response as unknown as Promise<
-          NextResponse<Record<PropertyKey, never>>
-        >
-      }
-
       try {
-        jsonBody.parse(await response.clone().json()) // Clone to avoid already read response error
-        return response as unknown as NextResponse<TResponse>
-      } catch (error: unknown) {
-        if (isZodError(error)) {
-          throw new InternalServerErrorException({
-            type: 'unknown_response',
-            message: createZodErrorMessage(error),
-            errors: error.format(),
-          })
+        const response = await handleRequest({
+          body,
+          cookies: request.cookies,
+          nextUrl: request.nextUrl,
+          query,
+          routeParams,
+          headers: request.headers,
+        })
+
+        const jsonBody = config.response as z.AnyZodObject | undefined
+        if (!jsonBody) {
+          return response as unknown as Promise<
+            NextResponse<Record<PropertyKey, never>>
+          >
         }
 
-        return response
+        try {
+          jsonBody.parse(await response.clone().json()) // Clone to avoid already read response error
+          return response as unknown as NextResponse<TResponse>
+        } catch (error: unknown) {
+          if (error instanceof ZodError) {
+            throw new InternalServerErrorException({
+              type: 'unknown_response',
+              message: createZodErrorMessage(error),
+              errors: error.format(),
+            })
+          }
+
+          return response
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          return NextResponse.json(
+            {
+              type: 'server_error',
+              message: 'Unknown server error',
+              stack_trace: error.stack?.split('\n'),
+              data: 'data' in error ? error.data : null,
+            },
+            { status: 500 }
+          )
+        }
+
+        throw error
       }
     })
   }
@@ -110,7 +128,7 @@ async function parseBody<TBodyParams extends z.AnyZodObject>(
 
     return bodyParams.parse(data)
   } catch (error: unknown) {
-    if (isZodError(error)) {
+    if (error instanceof ZodError) {
       throw new BadRequestException({
         type: 'invalid_data',
         message: createZodErrorMessage(error),
@@ -179,7 +197,7 @@ async function parseQuery<TQueryParams extends z.AnyZodObject>(
   try {
     return queryParmas.parse(contextParams)
   } catch (error: unknown) {
-    if (isZodError(error)) {
+    if (error instanceof ZodError) {
       throw new NotFoundException({
         type: 'missing_query_param',
         message: createZodErrorMessage(error),
@@ -202,7 +220,7 @@ async function parseRouteParams<TRouteParams extends z.AnyZodObject>(
   try {
     return routeParams.parse(contextParams)
   } catch (error: unknown) {
-    if (isZodError(error)) {
+    if (error instanceof ZodError) {
       throw new NotFoundException({
         type: 'missing_route_param',
         message: createZodErrorMessage(error),
@@ -212,20 +230,4 @@ async function parseRouteParams<TRouteParams extends z.AnyZodObject>(
 
     throw error
   }
-}
-
-function isZodError(error: unknown): error is ZodError {
-  if (typeof error !== 'object') {
-    return false
-  }
-
-  if (!error) {
-    return false
-  }
-
-  if (!('constructor' in error)) {
-    return false
-  }
-
-  return error.constructor.name === 'ZodError' && 'issues' in error
 }

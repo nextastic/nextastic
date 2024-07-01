@@ -15,9 +15,13 @@ export class HttpException extends Error {
   constructor(
     public status: number,
     public metadata: HttpExceptionMetadata,
-    options?: ThrowingOptions
+    options?: ThrowingOptions,
   ) {
     super(metadata.message)
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor)
+    }
 
     this.options = options ?? { json: true }
   }

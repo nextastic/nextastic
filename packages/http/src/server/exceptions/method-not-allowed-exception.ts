@@ -7,7 +7,7 @@ import {
 export class MethodNotAllowedException extends HttpException {
   constructor(
     public metadata: HttpExceptionMetadata,
-    options?: ThrowingOptions
+    options?: ThrowingOptions,
   ) {
     super(405, metadata, options)
   }

@@ -7,7 +7,7 @@ import {
 export class InternalServerErrorException extends HttpException {
   constructor(
     public metadata: HttpExceptionMetadata,
-    options?: ThrowingOptions
+    options?: ThrowingOptions,
   ) {
     super(500, metadata, options)
   }

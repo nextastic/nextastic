@@ -1,5 +1,11 @@
 # @nextastic/http
 
+## 1.1.0
+
+### Minor Changes
+
+- Preserve error stack on throw
+
 ## 1.0.4
 
 ### Patch Changes

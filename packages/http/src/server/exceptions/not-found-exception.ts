@@ -1,5 +1,8 @@
-import { HttpException, ThrowingOptions } from './http-exception'
-import { HttpExceptionMetadata } from './http-exception'
+import {
+  HttpException,
+  ThrowingOptions,
+  HttpExceptionMetadata,
+} from './http-exception'
 
 export class NotFoundException extends HttpException {
   constructor(
