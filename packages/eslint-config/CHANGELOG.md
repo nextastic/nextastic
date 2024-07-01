@@ -5,7 +5,6 @@
 ### Minor Changes
 
 - 0801f2c: fix missing typescript-eslint
-- Add typescript parser
 
 ## 1.0.0
 
