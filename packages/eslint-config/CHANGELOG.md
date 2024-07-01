@@ -1,5 +1,11 @@
 # @nextastic/eslint
 
+## 1.0.0
+
+### Major Changes
+
+- 482b35c: Release eslint-config
+
 ## 0.2.0
 
 ### Minor Changes
