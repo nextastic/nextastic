@@ -1,6 +1,6 @@
 {
   "name": "aws",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@nextastic/http": "1.1.0",
+    "@nextastic/http": "1.1.1",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
