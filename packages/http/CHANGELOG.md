@@ -1,5 +1,11 @@
 # @nextastic/http
 
+## 1.1.1
+
+### Patch Changes
+
+- 9e0f726: Loosen next & zod peer versions
+
 ## 1.1.0
 
 ### Minor Changes
