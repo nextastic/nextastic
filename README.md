@@ -13,7 +13,7 @@ Nextastic aims to provide the tools required to run Next.js in a managed environ
 
 Serverless is great, but we're starting to see some of it's downsides: astronomical usage costs, complexity in managing 3-4 separate services and vendor lock-in, lack of flexibility, performance bottlenecks.
 
-This [tweet](https://x.com/taylorotwell/status/1791468060903096422) by Taylor (creator of Laravel) sums it up nicely: 
+If you attempted to run a Next.js app on your own servers (self-managed), you'll quickly realize that Next.js is missing a ton of features to do this. This [tweet](https://x.com/taylorotwell/status/1791468060903096422) by Taylor (creator of Laravel) sums it up nicely: 
 
 ![CleanShot 2024-09-07 at 15 44 20@2x](https://github.com/user-attachments/assets/84f88191-bd29-4831-81c5-5db3dbdb879f)
 
