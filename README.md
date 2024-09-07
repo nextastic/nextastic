@@ -24,3 +24,14 @@ This [tweet](https://x.com/taylorotwell/status/1791468060903096422) by Taylor (c
 - avoid vendor lock-in
 - favor explicit over implicit. This deviates from the convention over configuration approach that Laravel / Rails favors.
 - Avoid DSL
+
+## To Do
+
+- [x] DB query builder & migration
+- [x] Routes and form validation
+- [ ] Storage (File system)
+- [ ] Queues and jobs
+- [ ] Logging system
+- [ ] Authentication & Authorization
+- [ ] Mail
+- [ ] Cache
