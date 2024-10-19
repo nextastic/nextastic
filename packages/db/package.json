@@ -1,6 +1,6 @@
 {
   "name": "@nextastic/db",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Database utils to create migrations and types.",
   "type": "module",
   "repository": {

@@ -1,5 +1,13 @@
 # aws
 
+## 0.2.13
+
+### Patch Changes
+
+- 4830d0f: create js migrations
+- Updated dependencies [4830d0f]
+  - @nextastic/db@2.0.2
+
 ## 0.2.12
 
 ### Patch Changes
