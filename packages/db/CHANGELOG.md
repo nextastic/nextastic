@@ -1,5 +1,13 @@
 # @nextastic/db
 
+## 1.2.2
+
+### Patch Changes
+
+- patch bump
+- 2539ddc: fix missing node env
+- 077cf53: add ability to set migration path
+
 ## 1.2.1
 
 ### Patch Changes
