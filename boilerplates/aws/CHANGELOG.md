@@ -1,5 +1,13 @@
 # aws
 
+## 0.2.15
+
+### Patch Changes
+
+- 96c06ca: set migration to js
+- Updated dependencies [96c06ca]
+  - @nextastic/db@2.0.4
+
 ## 0.2.14
 
 ### Patch Changes

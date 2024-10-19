@@ -1,5 +1,11 @@
 # @nextastic/db
 
+## 2.0.4
+
+### Patch Changes
+
+- 96c06ca: set migration to js
+
 ## 2.0.3
 
 ### Patch Changes
