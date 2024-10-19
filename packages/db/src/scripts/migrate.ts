@@ -1,16 +1,14 @@
 import { Client } from 'pg'
 import { getConnectionStringFromEnv } from 'pg-connection-from-env'
 import nodePgMigrate from 'node-pg-migrate'
-import { join, dirname } from 'node:path'
+import { join } from 'node:path'
 import process from 'node:process'
-
-const migrationDir = join(__dirname, '../migrations')
 
 const database = process.env.POSTGRES_DB
 
-export async function migrate() {
-  const fullPath = dirname(require.main?.filename ?? '')
-  console.log('path: ', fullPath)
+export async function migrate(directory?: string) {
+  const dir =
+    directory ?? join(__dirname, '../../../../src/database/migrations')
   const client = new Client(
     getConnectionStringFromEnv({
       fallbackDefaults: {
@@ -29,7 +27,7 @@ export async function migrate() {
     migrationsSchema: 'migrations',
     migrationsTable: 'pgmigrations',
     verbose: false,
-    dir: migrationDir,
+    dir,
   })
 
   // eslint-disable-next-line no-console

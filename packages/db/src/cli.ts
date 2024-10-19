@@ -21,7 +21,7 @@ async function cli(args: ParsedArgs) {
   }
 
   if (args._[0] === 'migrate') {
-    await migrate()
+    await migrate(args._[1])
   }
 }
 
