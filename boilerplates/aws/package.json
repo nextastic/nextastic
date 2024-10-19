@@ -14,14 +14,14 @@
   },
   "dependencies": {
     "@nextastic/db": "2.0.1",
-    "@nextastic/http": "2.0.0",
     "@nextastic/eslint-config": "2.0.0",
+    "@nextastic/http": "2.0.0",
+    "dotenv-cli": "^7.4.1",
     "next": "14.2.3",
     "node-pg-migrate": "^6.2.2",
     "react": "^18",
     "react-dom": "^18",
-    "zod": "^3.23.8",
-    "dotenv-cli": "^7.4.1"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20",

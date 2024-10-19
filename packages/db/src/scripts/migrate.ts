@@ -10,7 +10,8 @@ const database = process.env.POSTGRES_DB
 
 export async function migrate(directory?: string) {
   const dir =
-    directory ?? join(__dirname, '../../../../src/database/migrations')
+    directory ??
+    join(require.main?.path ?? '', '../../../../src/database/migrations')
   const client = new Client(
     getConnectionStringFromEnv({
       fallbackDefaults: {
