@@ -1,6 +1,6 @@
 {
   "name": "@nextastic/db",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Database utils to create migrations and types.",
   "repository": {
     "type": "git",
@@ -8,10 +8,21 @@
     "directory": "packages/db"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsup",
     "typecheck": "tsc --noEmit"
   },
-  "bin": "dist/cli.js",
+  "tsup": {
+    "entry": [
+      "src/cli.ts"
+    ],
+    "format": [
+      "cjs"
+    ],
+    "sourcemap": true
+  },
+  "bin": {
+    "db": "./dist/cli.js"
+  },
   "author": "mikewuu",
   "license": "MIT",
   "exports": {

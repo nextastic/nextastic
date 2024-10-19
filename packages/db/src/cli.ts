@@ -16,7 +16,8 @@ async function cli(args: ParsedArgs) {
   }
 
   if (args._[0] === 'make:types') {
-    await makeTypes()
+    const [_cmd, ...schemas] = args._
+    await makeTypes(schemas)
   }
 }
 
