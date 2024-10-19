@@ -1,4 +1,4 @@
-import { KyselyDatabaseInstance } from './schema/types'
+import { KyselyDatabaseInstance } from './schema/types.js'
 import { Kysely, PostgresDialect } from 'kysely'
 import { Pool } from 'pg'
 import { getConnectionStringFromEnv } from 'pg-connection-from-env'

@@ -18,7 +18,7 @@ export async function migrate(directory?: string) {
   )
   await client.connect()
 
-  await nodePgMigrate({
+  await nodePgMigrate.default({
     dbClient: client,
     direction: 'up',
     schema: 'public',

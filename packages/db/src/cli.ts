@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 import parseArgs, { ParsedArgs } from 'minimist'
-import { makeMigration } from './scripts/make-migration'
-import { drop } from './scripts/drop'
-import { makeTypes } from './scripts/make-types'
-import { migrate } from './scripts/migrate'
+import { makeMigration } from './scripts/make-migration.js'
+import { drop } from './scripts/drop.js'
+import { makeTypes } from './scripts/make-types.js'
+import { migrate } from './scripts/migrate.js'
 
 async function cli(args: ParsedArgs) {
   if (args._[0] === 'make:migration') {
