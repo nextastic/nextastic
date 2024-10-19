@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import parseArgs, { ParsedArgs } from 'minimist'
 import { makeMigration } from './scripts/make-migration'
 import { drop } from './scripts/drop'
