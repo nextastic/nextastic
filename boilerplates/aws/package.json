@@ -1,6 +1,6 @@
 {
   "name": "aws",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -13,9 +13,9 @@
     "db:generate": "dotenv -e .env.local db make:types foo bar"
   },
   "dependencies": {
-    "@nextastic/db": "1.2.3",
-    "@nextastic/http": "1.1.2",
-    "@nextastic/eslint-config": "1.1.2",
+    "@nextastic/db": "2.0.0",
+    "@nextastic/http": "2.0.0",
+    "@nextastic/eslint-config": "2.0.0",
     "next": "14.2.3",
     "node-pg-migrate": "^6.2.2",
     "react": "^18",
