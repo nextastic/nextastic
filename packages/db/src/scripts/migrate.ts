@@ -1,8 +1,10 @@
-import { Client } from 'pg'
+import pg from 'pg'
 import { getConnectionStringFromEnv } from 'pg-connection-from-env'
 import nodePgMigrate from 'node-pg-migrate'
 import { join } from 'node:path'
 import process from 'node:process'
+
+const { Client } = pg
 
 const database = process.env.POSTGRES_DB
 

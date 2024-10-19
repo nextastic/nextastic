@@ -1,8 +1,9 @@
-import { Client } from 'pg'
+import pg from 'pg'
 import { getConnectionStringFromEnv } from 'pg-connection-from-env'
 import process from 'node:process'
 
 const database = process.env.POSTGRES_DB
+const { Client } = pg
 
 export async function drop() {
   const postgresClient = new Client({

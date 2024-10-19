@@ -18,14 +18,14 @@ importers:
   boilerplates/aws:
     dependencies:
       '@nextastic/db':
-        specifier: 1.2.2
-        version: 1.2.2(@types/pg@8.11.10)(node-pg-migrate@6.2.2(pg@8.13.0))(typescript@5.4.5)
+        specifier: 2.0.0
+        version: 2.0.0(@types/pg@8.11.10)(node-pg-migrate@6.2.2(pg@8.13.0))(typescript@5.4.5)
       '@nextastic/eslint-config':
-        specifier: 1.1.1
-        version: 1.1.1(eslint@8.57.0)(typescript@5.4.5)
+        specifier: 2.0.0
+        version: 2.0.0(eslint@8.57.0)(typescript@5.4.5)
       '@nextastic/http':
-        specifier: 1.1.1
-        version: 1.1.1(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(zod@3.23.8)
+        specifier: 2.0.0
+        version: 2.0.0(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(zod@3.23.8)
       dotenv-cli:
         specifier: ^7.4.1
         version: 7.4.2
@@ -471,19 +471,19 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@nextastic/db@1.2.2':
-    resolution: {integrity: sha512-/Br/keXNSuNOji2sR70BzcoRIh6eG51nYdMo1FoNdBpvfefk8SHF6BqQV3WuTb5V77sUN/7GuC8hqgCXMWJI+Q==}
+  '@nextastic/db@2.0.0':
+    resolution: {integrity: sha512-xPxo3Qr5n+H0j73K9cXr0ah3njIJi5K5goHEB+KXRDMp0nA6uQ3OjG1ioNfFvLu9FGNyxP9UdEV7ghi701h83Q==}
     hasBin: true
     peerDependencies:
       node-pg-migrate: ^6.2.2
 
-  '@nextastic/eslint-config@1.1.1':
-    resolution: {integrity: sha512-3pIP2EQ+2J8vZaZBtQDkGFdRjTVUD7UEnwPLO4UZklmoKY79xIXUucir5cny7dRYOzkb/bPhuMq2bf3wtueP7g==}
+  '@nextastic/eslint-config@2.0.0':
+    resolution: {integrity: sha512-Gz2lWX3DojZBheIr6qGtBiODSt9Xjg1gL5bs0deGBJEpVrb6qCjg3RyW9x+cn5BJ+pDR8f0l63IuDh/cUdA5GQ==}
     peerDependencies:
       eslint: '>= 8'
 
-  '@nextastic/http@1.1.1':
-    resolution: {integrity: sha512-CYwyTYJKb+GmbSqrFei3CQpSnp1Dtd57WLRq9KdiWDz/BZzJMez2hUc9iIrxGGhaZueU1Oq+HM9iNA59JIk7Wg==}
+  '@nextastic/http@2.0.0':
+    resolution: {integrity: sha512-osY0QUXnCskUxNVT/QoN6eGO6ILbzQWyGZ9/o2dk34vK8S043ou+j48YkqrFRTp/cWF+umZq5ktQ172NY/b59w==}
     peerDependencies:
       next: '>=14'
       zod: '>=3'
@@ -3129,7 +3129,7 @@ snapshots:
   '@next/swc-win32-x64-msvc@14.2.3':
     optional: true
 
-  '@nextastic/db@1.2.2(@types/pg@8.11.10)(node-pg-migrate@6.2.2(pg@8.13.0))(typescript@5.4.5)':
+  '@nextastic/db@2.0.0(@types/pg@8.11.10)(node-pg-migrate@6.2.2(pg@8.13.0))(typescript@5.4.5)':
     dependencies:
       kysely: 0.27.4
       node-pg-migrate: 6.2.2(pg@8.13.0)
@@ -3141,7 +3141,7 @@ snapshots:
       - pg-native
       - typescript
 
-  '@nextastic/eslint-config@1.1.1(eslint@8.57.0)(typescript@5.4.5)':
+  '@nextastic/eslint-config@2.0.0(eslint@8.57.0)(typescript@5.4.5)':
     dependencies:
       '@typescript-eslint/eslint-plugin': 7.14.1(@typescript-eslint/parser@7.14.1(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)
       '@typescript-eslint/parser': 7.14.1(eslint@8.57.0)(typescript@5.4.5)
@@ -3152,7 +3152,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@nextastic/http@1.1.1(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(zod@3.23.8)':
+  '@nextastic/http@2.0.0(next@14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(zod@3.23.8)':
     dependencies:
       next: 14.2.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       zod: 3.23.8
