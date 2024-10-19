@@ -1,5 +1,11 @@
 # @nextastic/http
 
+## 1.1.2
+
+### Patch Changes
+
+- c990f9a: add type module
+
 ## 1.1.1
 
 ### Patch Changes

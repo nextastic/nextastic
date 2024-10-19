@@ -1,5 +1,11 @@
 # @nextastic/db
 
+## 1.2.3
+
+### Patch Changes
+
+- c990f9a: add type module
+
 ## 1.2.2
 
 ### Patch Changes
