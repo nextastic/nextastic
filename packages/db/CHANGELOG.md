@@ -1,5 +1,11 @@
 # @nextastic/db
 
+## 2.0.3
+
+### Patch Changes
+
+- 4a0903e: bump version
+
 ## 2.0.2
 
 ### Patch Changes

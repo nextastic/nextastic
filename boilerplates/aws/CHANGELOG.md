@@ -1,5 +1,12 @@
 # aws
 
+## 0.2.14
+
+### Patch Changes
+
+- Updated dependencies [4a0903e]
+  - @nextastic/db@2.0.3
+
 ## 0.2.13
 
 ### Patch Changes
