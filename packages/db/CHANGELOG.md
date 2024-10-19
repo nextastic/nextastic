@@ -1,5 +1,11 @@
 # @nextastic/db
 
+## 2.0.2
+
+### Patch Changes
+
+- 4830d0f: create js migrations
+
 ## 2.0.1
 
 ### Patch Changes
