@@ -1,8 +1,5 @@
 import GreetingForm from '@/app/GreetingForm'
-import { createDbClient } from '@nextastic/db'
 import Image from 'next/image'
-
-const dbClient = createDbClient()
 
 export default function Home() {
   return (
