@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  postgres:
+    image: 'postgres:16.2'
+    environment:
+      POSTGRES_DB: nextastic
+      POSTGRES_USER: postgres # Default
+      POSTGRES_HOST_AUTH_METHOD: trust # No PW required
+    ports:
+      - '5432:5432'
+
+  redis:
+    image: redis:7.0-alpine
+    restart: unless-stopped
+    ports:
+      - 6379:6379

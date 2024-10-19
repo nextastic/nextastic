@@ -1,7 +1,7 @@
 import { Client } from 'pg'
 import { getConnectionStringFromEnv } from 'pg-connection-from-env'
 import nodePgMigrate from 'node-pg-migrate'
-import { join } from 'node:path'
+import { join, dirname } from 'node:path'
 import process from 'node:process'
 
 const migrationDir = join(__dirname, '../migrations')
@@ -9,6 +9,8 @@ const migrationDir = join(__dirname, '../migrations')
 const database = process.env.POSTGRES_DB
 
 export async function migrate() {
+  const fullPath = dirname(require.main?.filename ?? '')
+  console.log('path: ', fullPath)
   const client = new Client(
     getConnectionStringFromEnv({
       fallbackDefaults: {

@@ -1,22 +1,27 @@
 {
   "name": "aws",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:migrate": "dotenv -e .env.local db migrate",
+    "postdb:migrate": "npm run db:generate",
+    "db:drop": "dotenv -e .env.local db drop",
+    "db:generate": "dotenv -e .env.local db make:types foo bar"
   },
   "dependencies": {
-    "@nextastic/db": "^1.2.0",
-    "@nextastic/eslint-config": "workspace:*",
+    "@nextastic/db": "1.2.1",
     "@nextastic/http": "1.1.1",
+    "@nextastic/eslint-config": "1.1.1",
     "next": "14.2.3",
     "node-pg-migrate": "^6.2.2",
     "react": "^18",
     "react-dom": "^18",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "dotenv-cli": "^7.4.1"
   },
   "devDependencies": {
     "@types/node": "^20",

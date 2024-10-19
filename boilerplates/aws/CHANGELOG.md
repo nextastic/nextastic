@@ -1,5 +1,13 @@
 # aws
 
+## 0.2.8
+
+### Patch Changes
+
+- add aws migrations and fix migration path
+- Updated dependencies
+  - @nextastic/db@1.2.1
+
 ## 0.2.7
 
 ### Patch Changes
