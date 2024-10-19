@@ -1,5 +1,11 @@
 # @nextastic/eslint
 
+## 2.0.0
+
+### Major Changes
+
+- 3113b42: fix build
+
 ## 1.1.2
 
 ### Patch Changes

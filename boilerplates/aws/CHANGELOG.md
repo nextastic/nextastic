@@ -1,5 +1,14 @@
 # aws
 
+## 0.2.11
+
+### Patch Changes
+
+- Updated dependencies [3113b42]
+  - @nextastic/eslint-config@2.0.0
+  - @nextastic/http@2.0.0
+  - @nextastic/db@2.0.0
+
 ## 0.2.10
 
 ### Patch Changes
