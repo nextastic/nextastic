@@ -1,5 +1,13 @@
 # aws
 
+## 0.2.12
+
+### Patch Changes
+
+- b11d22f: fix migrate pg
+- Updated dependencies [b11d22f]
+  - @nextastic/db@2.0.1
+
 ## 0.2.11
 
 ### Patch Changes
