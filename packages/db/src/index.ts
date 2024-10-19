@@ -1,1 +1,1 @@
-export * from './create-db-client'
+export * from './db-client'

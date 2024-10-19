@@ -1,5 +1,11 @@
 # @nextastic/db
 
+## 1.2.0
+
+### Minor Changes
+
+- Add DB readme
+
 ## 1.1.0
 
 ### Minor Changes

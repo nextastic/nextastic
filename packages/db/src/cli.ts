@@ -5,8 +5,6 @@ import { makeTypes } from './scripts/make-types'
 import { migrate } from './scripts/migrate'
 
 async function cli(args: ParsedArgs) {
-  console.log('GOT ARGS: ', args)
-
   if (args._[0] === 'make:migration') {
     makeMigration(args._[1])
     return
