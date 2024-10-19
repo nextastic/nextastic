@@ -1,5 +1,11 @@
 # @nextastic/db
 
+## 1.1.0
+
+### Minor Changes
+
+- add migration command
+
 ## 1.0.0
 
 ### Major Changes
