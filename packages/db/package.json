@@ -1,0 +1,43 @@
+{
+  "name": "@nextastic/db",
+  "version": "0.0.2",
+  "description": "Database utils to create migrations and types.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nextastic/nextastic.git",
+    "directory": "packages/db"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "bin": "dist/cli.js",
+  "author": "mikewuu",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@types/minimist": "^1.2.5",
+    "@types/pg": "^8.11.10",
+    "minimist": "^1.2.8",
+    "tsup": "^8.3.0",
+    "typescript": "^5.4.5"
+  },
+  "peerDependencies": {
+    "node-pg-migrate": "^6.2.2"
+  },
+  "dependencies": {
+    "kysely": "^0.27.3",
+    "pg": "^8.13.0",
+    "pg-connection-from-env": "^1.1.0",
+    "zapatos": "^6.4.0"
+  }
+}

@@ -1,5 +1,13 @@
 # aws
 
+## 0.2.4
+
+### Patch Changes
+
+- Init db package
+- Updated dependencies
+  - @nextastic/db@0.0.2
+
 ## 0.2.3
 
 ### Patch Changes
