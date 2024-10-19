@@ -1,5 +1,11 @@
 # @nextastic/db
 
+## 2.0.1
+
+### Patch Changes
+
+- b11d22f: fix migrate pg
+
 ## 2.0.0
 
 ### Major Changes
