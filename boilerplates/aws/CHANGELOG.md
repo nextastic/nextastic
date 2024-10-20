@@ -1,5 +1,13 @@
 # aws
 
+## 0.2.20
+
+### Patch Changes
+
+- 0adfe44: fix migrate dir path
+- Updated dependencies [0adfe44]
+  - @nextastic/db@2.0.9
+
 ## 0.2.19
 
 ### Patch Changes

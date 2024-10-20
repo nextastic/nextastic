@@ -1,5 +1,11 @@
 # @nextastic/db
 
+## 2.0.9
+
+### Patch Changes
+
+- 0adfe44: fix migrate dir path
+
 ## 2.0.8
 
 ### Patch Changes
