@@ -28,7 +28,14 @@ export async function migrate(directory?: string) {
     },
   })
 
-  const args = ['-j', 'ts', '-m', `"${dir}"`]
+  const args = [
+    '-j',
+    'ts',
+    '-m',
+    `"${dir}"`,
+    '-tsconfig',
+    'node_modules/@nextastic/db/tsconfig.migrations.json',
+  ]
 
   childProcess.execSync(
     `DATABASE_URL=${dbString} npx ts-node node_modules/node-pg-migrate/bin/node-pg-migrate ${args.join(

@@ -18,8 +18,8 @@ importers:
   boilerplates/aws:
     dependencies:
       '@nextastic/db':
-        specifier: 2.0.5
-        version: 2.0.5(@types/pg@8.11.10)(node-pg-migrate@6.2.2(pg@8.13.0))(typescript@5.4.5)
+        specifier: 2.0.6
+        version: 2.0.6(@types/pg@8.11.10)(node-pg-migrate@6.2.2(pg@8.13.0))(ts-node@10.9.2(@types/node@20.12.8)(typescript@5.4.5))(typescript@5.4.5)
       '@nextastic/eslint-config':
         specifier: 2.0.0
         version: 2.0.0(eslint@8.57.0)(typescript@5.4.5)
@@ -76,7 +76,7 @@ importers:
         specifier: ^0.27.4
         version: 0.27.4
       node-pg-migrate:
-        specifier: ^6.2.2
+        specifier: ^6
         version: 6.2.2(pg@8.13.0)
       pg:
         specifier: ^8.13.0
@@ -84,6 +84,9 @@ importers:
       pg-connection-from-env:
         specifier: ^1.1.0
         version: 1.1.0
+      ts-node:
+        specifier: ^10
+        version: 10.9.2(@types/node@20.12.8)(typescript@5.4.5)
       zapatos:
         specifier: ^6.4.0
         version: 6.4.4(@types/pg@8.11.10)(pg@8.13.0)(typescript@5.4.5)
@@ -478,11 +481,12 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@nextastic/db@2.0.5':
-    resolution: {integrity: sha512-bUC0IFzYPYVeHzwGg2zAChjuKiwtank75dg2skxEJ2vkKuDhfF4wUKU80rKxohrQMaZAPRiNvaoG5Z2AdqFdyA==}
+  '@nextastic/db@2.0.6':
+    resolution: {integrity: sha512-QbFrgm3O2s+BR98+i5IewG6decIdm8WlOy+9/luyx0ASyWTTGZa3PqHifqdkDcstvm4Nzl2YlzCsMW0/F3PLdw==}
     hasBin: true
     peerDependencies:
-      node-pg-migrate: ^6.2.2
+      node-pg-migrate: ^6
+      ts-node: ^10
 
   '@nextastic/eslint-config@2.0.0':
     resolution: {integrity: sha512-Gz2lWX3DojZBheIr6qGtBiODSt9Xjg1gL5bs0deGBJEpVrb6qCjg3RyW9x+cn5BJ+pDR8f0l63IuDh/cUdA5GQ==}
@@ -3007,7 +3011,6 @@ snapshots:
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
-    optional: true
 
   '@esbuild/aix-ppc64@0.23.1':
     optional: true
@@ -3146,7 +3149,6 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
-    optional: true
 
   '@manypkg/find-root@1.1.0':
     dependencies:
@@ -3197,12 +3199,13 @@ snapshots:
   '@next/swc-win32-x64-msvc@14.2.3':
     optional: true
 
-  '@nextastic/db@2.0.5(@types/pg@8.11.10)(node-pg-migrate@6.2.2(pg@8.13.0))(typescript@5.4.5)':
+  '@nextastic/db@2.0.6(@types/pg@8.11.10)(node-pg-migrate@6.2.2(pg@8.13.0))(ts-node@10.9.2(@types/node@20.12.8)(typescript@5.4.5))(typescript@5.4.5)':
     dependencies:
       kysely: 0.27.4
       node-pg-migrate: 6.2.2(pg@8.13.0)
       pg: 8.13.0
       pg-connection-from-env: 1.1.0
+      ts-node: 10.9.2(@types/node@20.12.8)(typescript@5.4.5)
       zapatos: 6.4.4(@types/pg@8.11.10)(pg@8.13.0)(typescript@5.4.5)
     transitivePeerDependencies:
       - '@types/pg'
@@ -3297,17 +3300,13 @@ snapshots:
       '@swc/counter': 0.1.3
       tslib: 2.6.2
 
-  '@tsconfig/node10@1.0.11':
-    optional: true
+  '@tsconfig/node10@1.0.11': {}
 
-  '@tsconfig/node12@1.0.11':
-    optional: true
+  '@tsconfig/node12@1.0.11': {}
 
-  '@tsconfig/node14@1.0.3':
-    optional: true
+  '@tsconfig/node14@1.0.3': {}
 
-  '@tsconfig/node16@1.0.4':
-    optional: true
+  '@tsconfig/node16@1.0.4': {}
 
   '@types/estree@1.0.6': {}
 
@@ -3472,7 +3471,6 @@ snapshots:
   acorn-walk@8.3.4:
     dependencies:
       acorn: 8.11.3
-    optional: true
 
   acorn@8.11.3: {}
 
@@ -3506,8 +3504,7 @@ snapshots:
       normalize-path: 3.0.0
       picomatch: 2.3.1
 
-  arg@4.1.3:
-    optional: true
+  arg@4.1.3: {}
 
   arg@5.0.2: {}
 
@@ -3734,8 +3731,7 @@ snapshots:
 
   consola@3.2.3: {}
 
-  create-require@1.1.1:
-    optional: true
+  create-require@1.1.1: {}
 
   cross-spawn@5.1.0:
     dependencies:
@@ -3831,8 +3827,7 @@ snapshots:
 
   didyoumean@1.2.2: {}
 
-  diff@4.0.2:
-    optional: true
+  diff@4.0.2: {}
 
   dir-glob@3.0.1:
     dependencies:
@@ -4705,8 +4700,7 @@ snapshots:
     dependencies:
       yallist: 4.0.0
 
-  make-error@1.3.6:
-    optional: true
+  make-error@1.3.6: {}
 
   map-obj@1.0.1: {}
 
@@ -5520,7 +5514,6 @@ snapshots:
       typescript: 5.4.5
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    optional: true
 
   tsconfig-paths@3.15.0:
     dependencies:
@@ -5658,8 +5651,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  v8-compile-cache-lib@3.0.1:
-    optional: true
+  v8-compile-cache-lib@3.0.1: {}
 
   validate-npm-package-license@3.0.4:
     dependencies:
@@ -5806,8 +5798,7 @@ snapshots:
       y18n: 5.0.8
       yargs-parser: 21.1.1
 
-  yn@3.1.1:
-    optional: true
+  yn@3.1.1: {}
 
   yocto-queue@0.1.0: {}
 
