@@ -1,5 +1,13 @@
 # aws
 
+## 0.2.16
+
+### Patch Changes
+
+- 3e33dc8: Fix migrate command
+- Updated dependencies [3e33dc8]
+  - @nextastic/db@2.0.5
+
 ## 0.2.15
 
 ### Patch Changes

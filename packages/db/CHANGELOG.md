@@ -1,5 +1,11 @@
 # @nextastic/db
 
+## 2.0.5
+
+### Patch Changes
+
+- 3e33dc8: Fix migrate command
+
 ## 2.0.4
 
 ### Patch Changes
