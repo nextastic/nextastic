@@ -13,21 +13,23 @@
     "db:generate": "dotenv -e .env.local db make:types myapp"
   },
   "dependencies": {
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.15",
     "@nextastic/db": "workspace:*",
     "@nextastic/eslint-config": "workspace:*",
-    "@nextastic/http": "workspace:*"
+    "@nextastic/http": "workspace:*",
+    "dotenv-cli": "^7.4.2",
+    "next": "14.2.15",
+    "react": "^18",
+    "react-dom": "^18"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.15",
+    "node-pg-migrate": "^6.2.2",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.15"
+    "typescript": "^5"
   }
 }
