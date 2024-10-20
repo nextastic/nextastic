@@ -1,4 +1,5 @@
 import GreetingForm from '@/app/GreetingForm'
+import { dbClient } from '@nextastic/db'
 
 export default function Home() {
   return (

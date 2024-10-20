@@ -10,7 +10,7 @@
     "db:migrate": "dotenv -e .env.local db migrate $(pwd)/src/database/migrations",
     "postdb:migrate": "npm run db:generate",
     "db:drop": "dotenv -e .env.local db drop",
-    "db:generate": "dotenv -e .env.local db make:types foo bar"
+    "db:generate": "dotenv -e .env.local db make:types myapp"
   },
   "dependencies": {
     "@nextastic/db": "2.0.4",

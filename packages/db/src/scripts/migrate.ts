@@ -3,6 +3,7 @@ import { getConnectionStringFromEnv } from 'pg-connection-from-env'
 import nodePgMigrate from 'node-pg-migrate'
 import { join } from 'node:path'
 import process from 'node:process'
+import * as childProcess from 'node:child_process'
 
 const { Client } = pg
 
@@ -21,17 +22,19 @@ export async function migrate(directory?: string) {
   )
   await client.connect()
 
-  await nodePgMigrate.default({
-    dbClient: client,
-    direction: 'up',
-    schema: 'public',
-    createSchema: true,
-    createMigrationsSchema: true,
-    migrationsSchema: 'migrations',
-    migrationsTable: 'pgmigrations',
-    verbose: false,
-    dir,
+  const dbString = getConnectionStringFromEnv({
+    fallbackDefaults: {
+      database,
+    },
   })
+
+  const args = ['-j', 'ts', '-m', `"${dir}"`]
+
+  childProcess.execSync(
+    `DATABASE_URL=${dbString} npx ts-node node_modules/node-pg-migrate/bin/node-pg-migrate ${args.join(
+      ' '
+    )} up`
+  )
 
   // eslint-disable-next-line no-console
   console.log('Running migrations...')

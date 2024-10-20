@@ -5,6 +5,7 @@ import process from 'node:process'
 const database = process.env.POSTGRES_DB
 
 export async function makeTypes(schemas: string[]) {
+  console.log('SCHEMAS: ', schemas);
   await zg.generate({
     db: {
       connectionString: getConnectionStringFromEnv({

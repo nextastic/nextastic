@@ -18,8 +18,8 @@ importers:
   boilerplates/aws:
     dependencies:
       '@nextastic/db':
-        specifier: 2.0.3
-        version: 2.0.3(@types/pg@8.11.10)(node-pg-migrate@6.2.2(pg@8.13.0))(typescript@5.4.5)
+        specifier: workspace:*
+        version: link:../../packages/db
       '@nextastic/eslint-config':
         specifier: 2.0.0
         version: 2.0.0(eslint@8.57.0)(typescript@5.4.5)
@@ -477,12 +477,6 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
-
-  '@nextastic/db@2.0.3':
-    resolution: {integrity: sha512-j7aYeRmeULLYLLEp6wn1BRE2bT0q0p+msQD6m8T+vO7LVovC71govmGgohrfXomRdFYyg3rUH14t90F1grzAWQ==}
-    hasBin: true
-    peerDependencies:
-      node-pg-migrate: ^6.2.2
 
   '@nextastic/eslint-config@2.0.0':
     resolution: {integrity: sha512-Gz2lWX3DojZBheIr6qGtBiODSt9Xjg1gL5bs0deGBJEpVrb6qCjg3RyW9x+cn5BJ+pDR8f0l63IuDh/cUdA5GQ==}
@@ -3196,18 +3190,6 @@ snapshots:
 
   '@next/swc-win32-x64-msvc@14.2.3':
     optional: true
-
-  '@nextastic/db@2.0.3(@types/pg@8.11.10)(node-pg-migrate@6.2.2(pg@8.13.0))(typescript@5.4.5)':
-    dependencies:
-      kysely: 0.27.4
-      node-pg-migrate: 6.2.2(pg@8.13.0)
-      pg: 8.13.0
-      pg-connection-from-env: 1.1.0
-      zapatos: 6.4.4(@types/pg@8.11.10)(pg@8.13.0)(typescript@5.4.5)
-    transitivePeerDependencies:
-      - '@types/pg'
-      - pg-native
-      - typescript
 
   '@nextastic/eslint-config@2.0.0(eslint@8.57.0)(typescript@5.4.5)':
     dependencies:
