@@ -1,5 +1,11 @@
 # @nextastic/db
 
+## 2.0.6
+
+### Patch Changes
+
+- be3de94: add tsconfig
+
 ## 2.0.5
 
 ### Patch Changes

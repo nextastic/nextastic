@@ -1,6 +1,6 @@
 {
   "name": "aws",
-  "version": "0.2.16",
+  "version": "0.2.17",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -13,7 +13,7 @@
     "db:generate": "dotenv -e .env.local db make:types myapp"
   },
   "dependencies": {
-    "@nextastic/db": "2.0.5",
+    "@nextastic/db": "2.0.6",
     "@nextastic/eslint-config": "2.0.0",
     "@nextastic/http": "2.0.0",
     "dotenv-cli": "^7.4.1",
