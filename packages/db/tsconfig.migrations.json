@@ -1,6 +1,6 @@
 {
     // Extend the original tsconfig.json
-    "extends": "./tsconfig.json",
+    "extends": "../../../tsconfig.json",
     "compilerOptions": {
         // Use commonjs instead of esm when compiling the migration files
         "module": "CommonJS",
