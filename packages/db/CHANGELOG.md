@@ -1,5 +1,11 @@
 # @nextastic/db
 
+## 2.0.8
+
+### Patch Changes
+
+- bc0725b: use tsnode project
+
 ## 2.0.7
 
 ### Patch Changes

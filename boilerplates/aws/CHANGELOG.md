@@ -1,5 +1,13 @@
 # aws
 
+## 0.2.19
+
+### Patch Changes
+
+- bc0725b: use tsnode project
+- Updated dependencies [bc0725b]
+  - @nextastic/db@2.0.8
+
 ## 0.2.18
 
 ### Patch Changes
