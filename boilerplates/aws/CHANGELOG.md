@@ -1,5 +1,13 @@
 # aws
 
+## 0.2.17
+
+### Patch Changes
+
+- caf4cf5: fix db package
+- Updated dependencies [be3de94]
+  - @nextastic/db@2.0.6
+
 ## 0.2.16
 
 ### Patch Changes
