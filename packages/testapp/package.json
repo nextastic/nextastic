@@ -1,0 +1,35 @@
+{
+  "name": "testapp",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:migrate": "dotenv -e .env.local db migrate $(pwd)/src/database/migrations",
+    "postdb:migrate": "npm run db:generate",
+    "db:drop": "dotenv -e .env.local db drop",
+    "db:generate": "dotenv -e .env.local db make:types myapp"
+  },
+  "dependencies": {
+    "@nextastic/db": "workspace:*",
+    "@nextastic/eslint-config": "workspace:*",
+    "@nextastic/http": "workspace:*",
+    "dotenv-cli": "^7.4.2",
+    "next": "14.2.15",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.15",
+    "node-pg-migrate": "^6.2.2",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  }
+}
