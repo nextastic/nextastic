@@ -1,0 +1,30 @@
+{
+  "name": "@nextastic/utils",
+  "version": "0.0.1",
+  "description": "Utility functions for Nextastic",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nextastic/nextastic.git",
+    "directory": "packages/utils"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "author": "mikewuu",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.12.8",
+    "typescript": "^5.4.5"
+  }
+}
