@@ -11,5 +11,7 @@
     "skipLibCheck": true,
     "verbatimModuleSyntax": false,
     "stripInternal": true
+    
   }
+  
 }

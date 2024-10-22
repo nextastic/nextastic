@@ -1,0 +1,33 @@
+{
+  "name": "@nextastic/redis",
+  "version": "0.0.1",
+  "description": "Redis API for your application.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nextastic/nextastic.git",
+    "directory": "packages/redis"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "author": "mikewuu",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  },
+  "peerDependencies": {},
+  "dependencies": {
+    "redis": "^4.6.13"
+  }
+}
