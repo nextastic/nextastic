@@ -24,15 +24,19 @@
     "dist"
   ],
   "devDependencies": {
+    "@types/express": "^4.17.21",
     "typescript": "^5.4.5"
   },
-  "peerDependencies": {},
   "dependencies": {
-    "bullmq": "^5.4.6",
-    "ioredis": "^5.3.2",
+    "@bull-board/api": "^6.3.3",
+    "@bull-board/express": "^6.3.3",
+    "@nextastic/cache": "workspace:*",
+    "@nextastic/logger": "workspace:*",
     "@nextastic/redis": "workspace:*",
     "@nextastic/utils": "workspace:*",
-    "@nextastic/logger": "workspace:*",
-    "@nextastic/cache": "workspace:*"
+    "bullmq": "^5.4.6",
+    "express": "^4.21.1",
+    "express-basic-auth": "^1.2.1",
+    "ioredis": "^5.3.2"
   }
 }
