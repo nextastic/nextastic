@@ -1,5 +1,11 @@
 # @nextastic/db
 
+## 2.1.0
+
+### Minor Changes
+
+- 534633b: Expose db types
+
 ## 2.0.9
 
 ### Patch Changes
