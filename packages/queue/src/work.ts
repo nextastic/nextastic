@@ -5,12 +5,14 @@ import { Job as BullMQJob } from 'bullmq'
 import { getJobs } from './get-jobs'
 import { Queue } from './types'
 
-interface WorkConfig {
+interface WorkParams {
+  queues: Queue[]
   jobsDir?: string
 }
 
-export async function work(queues: Queue[], config: WorkConfig = {}) {
-  const jobs = await getJobs(config.jobsDir)
+export async function work(params: WorkParams) {
+  const { queues, jobsDir } = params
+  const jobs = await getJobs(jobsDir)
 
   for (const queue of queues) {
     const connection = new Redis(process.env.REDIS_HOST!, {
