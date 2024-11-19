@@ -1,5 +1,11 @@
 # @nextastic/queue
 
+## 0.3.3
+
+### Patch Changes
+
+- 3d154a9: fix duplicate dshboard script
+
 ## 0.3.2
 
 ### Patch Changes
