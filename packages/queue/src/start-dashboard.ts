@@ -37,6 +37,7 @@ export function startDashboard(queues: string[]) {
   const server = app.listen(3100, () => {
     // eslint-disable-next-line no-console
     console.log('Running on 3100...')
+
     // eslint-disable-next-line no-console
     console.log('For the UI, open http://localhost:3100/jobs')
   })

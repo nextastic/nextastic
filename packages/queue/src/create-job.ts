@@ -6,6 +6,7 @@ type JobContext = {
    * Unique ID for the job
    */
   id?: string
+  log: (message: string) => void
 }
 
 export type Job<TData = any, JReturnData = any> = {

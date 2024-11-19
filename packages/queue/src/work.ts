@@ -38,6 +38,14 @@ export async function work(params: WorkParams) {
         try {
           const result = await definedJob.handle(job.data as any, {
             id: job.id,
+            log: (message: string) => {
+              job.log(message)
+              logger.debug(message, {
+                event: 'job.log',
+                job: job.name,
+                data: JSON.stringify(job.data),
+              })
+            },
           }) // Ignore TS, as already type-safe when accessing hadnle
           logger.debug(`Completed job: ${job.name}`, {
             event: 'job.complete',
