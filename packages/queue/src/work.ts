@@ -74,6 +74,6 @@ export async function work(queues: Queue[], config: WorkConfig = {}) {
     ) as any
 
     // eslint-disable-next-line no-console
-    console.log(`Worker running jobs on "${queue}".`)
+    console.log(`Worker running jobs on "${queue.name}".`)
   }
 }
