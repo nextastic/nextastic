@@ -1,5 +1,11 @@
 # @nextastic/queue
 
+## 0.3.2
+
+### Patch Changes
+
+- 7609ceb: fix queues missing handlers
+
 ## 0.3.1
 
 ### Patch Changes
