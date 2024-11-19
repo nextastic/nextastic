@@ -16,6 +16,9 @@ export const syncQueue = {
 
     await defined.handle(data, {
       id: generateUuid(),
+      log: (message: string) => {
+        console.log(message)
+      },
     })
   },
   getRepeatableJobs: () => [],
