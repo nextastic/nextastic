@@ -1,5 +1,11 @@
 # @nextastic/queue
 
+## 0.2.1
+
+### Patch Changes
+
+- 78b71e4: Allow specifying jobs dir
+
 ## 0.2.0
 
 ### Minor Changes
