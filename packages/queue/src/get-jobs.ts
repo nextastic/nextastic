@@ -10,7 +10,7 @@ export async function getJobs(jobsDir?: string) {
 
   for (const file of await fs.readdir(directory)) {
     const moduleFile = await import(path.join(directory, file))
-    const job = Object.values(moduleFile)[0] as Job
+    const job = Object.values(moduleFile.default)[0] as Job
 
     jobs[job.id] = job
   }
