@@ -1,5 +1,16 @@
 # @nextastic/queue
 
+## 0.4.0
+
+### Minor Changes
+
+- 24bf668: add job logging
+
+### Patch Changes
+
+- Updated dependencies [24bf668]
+  - @nextastic/logger@0.1.0
+
 ## 0.3.3
 
 ### Patch Changes
