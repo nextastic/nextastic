@@ -1,5 +1,11 @@
 # @nextastic/queue
 
+## 0.4.1
+
+### Patch Changes
+
+- 95294db: fix missing log
+
 ## 0.4.0
 
 ### Minor Changes
