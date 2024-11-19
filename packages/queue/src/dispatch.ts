@@ -3,7 +3,7 @@ import { debouncedDispatch } from './debounced-dispatch'
 import { getQueue } from './get-queue'
 import { syncQueue } from './sync-queue'
 import { JobsOptions } from 'bullmq'
-import { getQueueConfig } from './queue-config'
+import { getQueueConfig } from './get-queue-config'
 
 export interface DispatchOptions extends JobsOptions {
   queue?: string
