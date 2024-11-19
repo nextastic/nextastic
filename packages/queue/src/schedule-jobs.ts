@@ -1,7 +1,13 @@
 import { getQueue } from './get-queue'
 import { Queue } from './types'
 
-export async function scheduleJobs(queues: Queue[], schedule: () => void) {
+interface ScheduleJobsParams {
+  queues: Queue[]
+  schedule: () => void
+}
+
+export async function scheduleJobs(params: ScheduleJobsParams) {
+  const { queues, schedule } = params
   for (const queue of queues) {
     const queueInstance = getQueue(queue.name)
 
