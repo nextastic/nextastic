@@ -10,12 +10,14 @@
     "db:migrate": "dotenv -e .env.local db migrate $(pwd)/src/database/migrations",
     "postdb:migrate": "npm run db:generate",
     "db:drop": "dotenv -e .env.local db drop",
-    "db:generate": "dotenv -e .env.local db make:types myapp"
+    "db:generate": "dotenv -e .env.local db make:types myapp",
+    "queue:dashboard": "dotenv -e .env.local queue dashboard"
   },
   "dependencies": {
     "@nextastic/db": "workspace:*",
     "@nextastic/eslint-config": "workspace:*",
     "@nextastic/http": "workspace:*",
+    "@nextastic/queue": "workspace:*",
     "dotenv-cli": "^7.4.2",
     "next": "14.2.15",
     "react": "^18",
