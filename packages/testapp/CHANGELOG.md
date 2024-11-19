@@ -1,5 +1,16 @@
 # testapp
 
+## 1.1.0
+
+### Minor Changes
+
+- 2d075e4: Add Queue cli command to start dashboard
+
+### Patch Changes
+
+- Updated dependencies [2d075e4]
+  - @nextastic/queue@0.3.0
+
 ## 1.0.1
 
 ### Patch Changes

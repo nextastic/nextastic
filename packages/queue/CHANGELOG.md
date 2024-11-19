@@ -1,5 +1,11 @@
 # @nextastic/queue
 
+## 0.3.0
+
+### Minor Changes
+
+- 2d075e4: Add Queue cli command to start dashboard
+
 ## 0.2.1
 
 ### Patch Changes
