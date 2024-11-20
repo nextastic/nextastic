@@ -10,12 +10,9 @@ export async function rateLimit(key: string, params: RateLimitParams) {
 
   const redis = await createRedisClient()
 
-  const [current] = await redis
-    .multi()
-    .incr(key)
-    .expire(key, durationSecs)
-    .exec()
+  const result = await redis.multi().incr(key).expire(key, durationSecs).exec()
 
+  const current = result?.[0]?.[1]
   if (typeof current !== 'number') {
     return false
   }
