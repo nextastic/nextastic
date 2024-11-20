@@ -3,7 +3,7 @@ import { debouncedDispatch } from './debounced-dispatch'
 import { getQueue } from './get-queue'
 import { syncQueue } from './sync-queue'
 import { JobsOptions } from 'bullmq'
-import { getQueueConfig } from './get-queue-config'
+import { queueConfig } from './queue-config'
 
 export interface DispatchOptions extends JobsOptions {
   queue?: string
@@ -37,9 +37,7 @@ export const dispatch = async (
 ) => {
   const { queue = 'default', debounce, ...jobOptions } = options
 
-  const config = await getQueueConfig()
-
-  if (config.driver === 'sync') {
+  if ((await queueConfig.get('driver')) === 'sync') {
     return syncQueue.add(name, data, jobOptions)
   }
 

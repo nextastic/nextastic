@@ -48,6 +48,7 @@
     "@nextastic/logger": "workspace:*",
     "@nextastic/redis": "workspace:*",
     "@nextastic/utils": "workspace:*",
+    "@nextastic/config": "workspace:*",
     "bullmq": "^5.4.6",
     "express": "^4.21.1",
     "express-basic-auth": "^1.2.1",

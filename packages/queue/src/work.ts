@@ -4,6 +4,7 @@ import { logger } from '@nextastic/logger'
 import { Job as BullMQJob } from 'bullmq'
 import { getJobs } from './get-jobs'
 import { Queue } from './types'
+import { queueConfig } from './queue-config'
 
 interface WorkParams {
   queues: Queue[]
@@ -77,9 +78,13 @@ export async function work(params: WorkParams) {
       {
         connection,
         concurrency: queue.concurrency,
-        removeOnComplete: { count: 1000 },
-        removeOnFail: { count: 5000 },
-        lockDuration: 600000, // 10 mins job timeout. Increased as code-gen (writing code) takes a while.
+        removeOnComplete: {
+          count: await queueConfig.get('maxCompletedJobs'),
+        },
+        removeOnFail: {
+          count: await queueConfig.get('maxFailedJobs'),
+        },
+        lockDuration: await queueConfig.get('jobTimeoutMs'),
       }
     ) as any
 
