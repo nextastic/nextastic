@@ -1,5 +1,14 @@
 # testapp
 
+## 2.0.1
+
+### Patch Changes
+
+- Updated dependencies [646b9ea]
+  - @nextastic/queue@2.0.0
+  - @nextastic/http@4.0.0
+  - @nextastic/db@4.0.0
+
 ## 2.0.0
 
 ### Major Changes

@@ -1,5 +1,18 @@
 # @nextastic/logger
 
+## 2.0.0
+
+### Major Changes
+
+- 646b9ea: Remove async config
+
+### Patch Changes
+
+- Updated dependencies [646b9ea]
+- Updated dependencies [83a84ae]
+- Updated dependencies [28e8ef6]
+  - @nextastic/config@2.0.0
+
 ## 1.0.0
 
 ### Major Changes

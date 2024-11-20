@@ -1,5 +1,11 @@
 # @nextastic/cache
 
+## 0.2.0
+
+### Minor Changes
+
+- 83a84ae: Allow specifying cache driver
+
 ## 0.1.0
 
 ### Minor Changes
