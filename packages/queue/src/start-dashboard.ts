@@ -24,8 +24,8 @@ export async function startDashboard(queues: string[]) {
 
   // Apply auth middleware to all routes
 
-  const username = await config.get('queue.dashboardUsername')
-  const password = await config.get('queue.dashboardPassword')
+  const username = config.queue.dashboardUsername
+  const password = config.queue.dashboardPassword
   const hasPassword = password !== undefined
   if (hasPassword) {
     // Add auth to require password for access

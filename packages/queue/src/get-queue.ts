@@ -4,15 +4,13 @@ import Redis from 'ioredis'
 
 const queues: Record<string, Queue> = {}
 
-export const getQueue = async (name: string) => {
+export const getQueue = (name: string) => {
   const existingQueue = queues[name]
   if (existingQueue) {
     return existingQueue
   }
 
-  const connection = new Redis(await config.get('redis.host'), {
-    maxRetriesPerRequest: null,
-  })
+  const connection = new Redis(config.redis.host)
 
   const queue = new Queue(name, {
     connection,

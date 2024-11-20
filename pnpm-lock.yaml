@@ -26,10 +26,6 @@ importers:
         version: 5.4.5
 
   packages/config:
-    dependencies:
-      '@nextastic/cache':
-        specifier: workspace:*
-        version: link:../cache
     devDependencies:
       '@types/node':
         specifier: ^22.9.1

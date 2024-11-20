@@ -37,7 +37,7 @@ export const dispatch = async (
 ) => {
   const { queue = 'default', debounce, ...jobOptions } = options
 
-  if ((await config.get('queue.driver')) === 'sync') {
+  if (config.queue.driver === 'sync') {
     return syncQueue.add(name, data, jobOptions)
   }
 
@@ -56,5 +56,5 @@ export const dispatch = async (
     })
   }
 
-  return (await getQueue(queue)).add(name, data, jobOptions)
+  return getQueue(queue).add(name, data, jobOptions)
 }

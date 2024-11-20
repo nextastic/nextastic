@@ -11,7 +11,7 @@ export async function connectDb(): Promise<KyselyDatabaseInstance> {
       pool: new Pool({
         connectionString: getConnectionStringFromEnv({
           fallbackDefaults: {
-            database: await config.get('db.POSTGRES_DB'),
+            database: config.db.name,
           },
         }),
       }),
