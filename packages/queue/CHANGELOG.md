@@ -1,5 +1,24 @@
 # @nextastic/queue
 
+## 1.0.0
+
+### Major Changes
+
+- fb718ed: Updated all to use @nextastic/config instead of env vars
+
+### Minor Changes
+
+- e30b973: Cache config
+- e30b973: Add queue config variables
+
+### Patch Changes
+
+- Updated dependencies [fb718ed]
+- Updated dependencies [e30b973]
+  - @nextastic/config@1.0.0
+  - @nextastic/logger@1.0.0
+  - @nextastic/cache@0.1.0
+
 ## 0.4.3
 
 ### Patch Changes

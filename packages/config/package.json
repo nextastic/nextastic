@@ -1,6 +1,6 @@
 {
   "name": "@nextastic/config",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Config provider to store and retrieve data.  ",
   "repository": {
     "type": "git",
