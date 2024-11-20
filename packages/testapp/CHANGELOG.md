@@ -1,5 +1,11 @@
 # testapp
 
+## 1.1.6
+
+### Patch Changes
+
+- @nextastic/queue@0.4.2
+
 ## 1.1.5
 
 ### Patch Changes
