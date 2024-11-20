@@ -11,12 +11,8 @@ export async function startDashboard(queues: string[]) {
   const serverAdapter = new ExpressAdapter()
   serverAdapter.setBasePath('/jobs')
 
-  const bullQueues = await Promise.all(
-    queues.map(async (queue) => new BullMQAdapter(await getQueue(queue)))
-  )
-
   createBullBoard({
-    queues: bullQueues,
+    queues: queues.map((queue) => new BullMQAdapter(getQueue(queue))),
     serverAdapter: serverAdapter,
   })
 

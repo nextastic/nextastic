@@ -16,7 +16,9 @@ export async function work(params: WorkParams) {
   const jobs = await getJobs(jobsDir)
 
   for (const queue of queues) {
-    const connection = new Redis(config.redis.host)
+    const connection = new Redis(config.redis.host, {
+      maxRetriesPerRequest: null,
+    })
 
     new Worker(
       queue.name,
