@@ -10,3 +10,15 @@ export const queueConfig = new Config({
   },
 })
 
+const fooConfig = new Config({
+  name: 'foo',
+  defaultValues: {
+    bar: 'baz',
+    queue: {
+      driver: 'redis',
+    },
+  },
+})
+
+const bar = await fooConfig.get('bar')
+
