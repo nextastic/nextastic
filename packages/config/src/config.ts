@@ -21,6 +21,13 @@ export const config = new Config({
        */
       POSTGRES_DB: process.env.POSTGRES_DB ?? 'postgres',
     },
+    cache: {
+      /**
+       * Where to store the cache
+       * @default 'redis'
+       */
+      driver: process.env.CACHE_DRIVER ?? 'redis',
+    },
     queue: {
       /**
        * The queue driver to use for job processing
