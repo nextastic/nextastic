@@ -1,6 +1,6 @@
 {
   "name": "@nextastic/redis",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Redis API for your application.",
   "repository": {
     "type": "git",

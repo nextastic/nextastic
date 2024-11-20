@@ -1,5 +1,13 @@
 # @nextastic/queue
 
+## 0.4.3
+
+### Patch Changes
+
+- Updated dependencies [05c414e]
+  - @nextastic/redis@0.0.3
+  - @nextastic/cache@0.0.3
+
 ## 0.4.2
 
 ### Patch Changes
