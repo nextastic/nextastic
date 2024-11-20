@@ -29,5 +29,8 @@
   "peerDependencies": {
     "next": ">=14",
     "zod": ">=3"
+  },
+  "dependencies": {
+    "@nextastic/config": "workspace:*"
   }
 }

@@ -24,9 +24,9 @@
     "dist"
   ],
   "devDependencies": {
+    "@types/node": "^22.9.1",
     "typescript": "^5.4.5"
   },
-  "peerDependencies": {},
   "dependencies": {
     "@nextastic/cache": "workspace:*"
   }

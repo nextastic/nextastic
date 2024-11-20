@@ -9,7 +9,7 @@ interface ScheduleJobsParams {
 export async function scheduleJobs(params: ScheduleJobsParams) {
   const { queues, schedule } = params
   for (const queue of queues) {
-    const queueInstance = getQueue(queue.name)
+    const queueInstance = await getQueue(queue.name)
 
     const schedulers = await queueInstance.getJobSchedulers()
     if (!schedulers) {

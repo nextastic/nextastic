@@ -3,7 +3,7 @@ import { debouncedDispatch } from './debounced-dispatch'
 import { getQueue } from './get-queue'
 import { syncQueue } from './sync-queue'
 import { JobsOptions } from 'bullmq'
-import { queueConfig } from './queue-config'
+import { config } from '@nextastic/config'
 
 export interface DispatchOptions extends JobsOptions {
   queue?: string
@@ -37,7 +37,7 @@ export const dispatch = async (
 ) => {
   const { queue = 'default', debounce, ...jobOptions } = options
 
-  if ((await queueConfig.get('driver')) === 'sync') {
+  if ((await config.get('queue.driver')) === 'sync') {
     return syncQueue.add(name, data, jobOptions)
   }
 
@@ -56,5 +56,5 @@ export const dispatch = async (
     })
   }
 
-  return getQueue(queue).add(name, data, jobOptions)
+  return (await getQueue(queue)).add(name, data, jobOptions)
 }

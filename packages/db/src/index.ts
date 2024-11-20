@@ -1,2 +1,2 @@
-export * from './db-client.js'
+export * from './connect-db.js'
 export * from './schema/types.js'

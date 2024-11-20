@@ -4,25 +4,33 @@ import { createBullBoard } from '@bull-board/api'
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter'
 import { ExpressAdapter } from '@bull-board/express'
 import process from 'node:process'
+import { config } from '@nextastic/config'
 import { getQueue } from './get-queue'
 
-export function startDashboard(queues: string[]) {
+export async function startDashboard(queues: string[]) {
   const serverAdapter = new ExpressAdapter()
   serverAdapter.setBasePath('/jobs')
 
+  const bullQueues = await Promise.all(
+    queues.map(async (queue) => new BullMQAdapter(await getQueue(queue)))
+  )
+
   createBullBoard({
-    queues: queues.map((queue) => new BullMQAdapter(getQueue(queue))),
+    queues: bullQueues,
     serverAdapter: serverAdapter,
   })
 
   const app = express()
 
   // Apply auth middleware to all routes
-  const hasPassword = process.env.QUEUE_DASHBOARD_PASSWORD !== undefined
+
+  const username = await config.get('queue.dashboardUsername')
+  const password = await config.get('queue.dashboardPassword')
+  const hasPassword = password !== undefined
   if (hasPassword) {
     // Add auth to require password for access
     const auth = basicAuth({
-      users: { admin: process.env.QUEUE_DASHBOARD_PASSWORD ?? '' },
+      users: { [username]: password },
       challenge: true, // Will show browser prompt
     })
 

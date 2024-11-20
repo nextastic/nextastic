@@ -1,10 +1,10 @@
 import { Worker } from 'bullmq'
 import Redis from 'ioredis'
-import { logger } from '@nextastic/logger'
+import { getLogger } from '@nextastic/logger'
 import { Job as BullMQJob } from 'bullmq'
 import { getJobs } from './get-jobs'
 import { Queue } from './types'
-import { queueConfig } from './queue-config'
+import { config } from '@nextastic/config'
 
 interface WorkParams {
   queues: Queue[]
@@ -14,9 +14,10 @@ interface WorkParams {
 export async function work(params: WorkParams) {
   const { queues, jobsDir } = params
   const jobs = await getJobs(jobsDir)
+  const logger = await getLogger()
 
   for (const queue of queues) {
-    const connection = new Redis(process.env.REDIS_HOST!, {
+    const connection = new Redis(await config.get('redis.host'), {
       maxRetriesPerRequest: null,
     })
 
@@ -79,12 +80,12 @@ export async function work(params: WorkParams) {
         connection,
         concurrency: queue.concurrency,
         removeOnComplete: {
-          count: await queueConfig.get('maxCompletedJobs'),
+          count: await config.get('queue.maxCompletedJobs'),
         },
         removeOnFail: {
-          count: await queueConfig.get('maxFailedJobs'),
+          count: await config.get('queue.maxFailedJobs'),
         },
-        lockDuration: await queueConfig.get('jobTimeoutMs'),
+        lockDuration: await config.get('queue.jobTimeoutMs'),
       }
     ) as any
 

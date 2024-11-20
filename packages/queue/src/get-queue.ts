@@ -1,15 +1,16 @@
+import { config } from '@nextastic/config'
 import { Queue } from 'bullmq'
 import Redis from 'ioredis'
 
 const queues: Record<string, Queue> = {}
 
-export const getQueue = (name: string) => {
+export const getQueue = async (name: string) => {
   const existingQueue = queues[name]
   if (existingQueue) {
     return existingQueue
   }
 
-  const connection = new Redis(process.env.REDIS_HOST!, {
+  const connection = new Redis(await config.get('redis.host'), {
     maxRetriesPerRequest: null,
   })
 

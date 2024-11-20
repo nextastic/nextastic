@@ -1,80 +1,71 @@
-import * as cache from '@nextastic/cache'
+import { Config } from './constructor'
 
-interface ConfigOptions<T> {
-  name: string
-  defaultValues: T
-}
+export const config = new Config({
+  defaultValues: {
+    app: {
+      /**
+       * The log level to use for logging
+       * @default 'info'
+       */
+      logLevel: process.env.NEXT_PUBLIC_LOG_LEVEL ?? 'info',
+      /**
+       * The URL of the app
+       * @default 'http://localhost:3000'
+       */
+      url: process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000',
+    },
+    db: {
+      /**
+       * The database name to use for the database connection
+       * @default 'postgres'
+       */
+      POSTGRES_DB: process.env.POSTGRES_DB ?? 'postgres',
+    },
+    queue: {
+      /**
+       * The queue driver to use for job processing
+       * @default 'redis'
+       */
+      driver: process.env.QUEUE_DRIVER ?? 'redis',
 
-// Add utility types for dot notation
-type PathImpl<T, K extends keyof T> = K extends string
-  ? T[K] extends Record<string, any>
-    ? T[K] extends ArrayLike<any>
-      ? never
-      : `${K}.${PathImpl<T[K], keyof T[K]>}`
-    : K
-  : never
+      /**
+       * Maximum number of completed jobs to keep in the queue history
+       * @default 1000
+       */
+      maxCompletedJobs: parseInt(
+        process.env.QUEUE_MAX_COMPLETED_JOBS ?? '1000'
+      ),
 
-type Path<T> = PathImpl<T, keyof T>
+      /**
+       * Maximum number of failed jobs to retain before cleanup
+       * @default 1000
+       */
+      maxFailedJobs: parseInt(process.env.QUEUE_MAX_FAILED_JOBS ?? '1000'),
 
-// Get the type of a nested property
-type PathValue<T, P extends Path<T>> = P extends `${infer K}.${infer Rest}`
-  ? K extends keyof T
-    ? Rest extends Path<T[K]>
-      ? PathValue<T[K], Rest>
-      : never
-    : never
-  : P extends keyof T
-  ? T[P]
-  : never
+      /**
+       * Timeout in milliseconds before another worker could pick up the job
+       * @default 60000
+       */
+      jobTimeoutMs: parseInt(process.env.QUEUE_JOB_TIMEOUT_MS ?? '60000'),
 
-export class Config<T extends Record<string, any>> {
-  private name: string
-  private defaultValues: T
+      /**
+       * The username for the queue dashboard
+       * @default 'admin'
+       */
+      dashboardUsername: process.env.QUEUE_DASHBOARD_USERNAME ?? 'admin',
 
-  constructor(options: ConfigOptions<T>) {
-    this.name = options.name
-    this.defaultValues = options.defaultValues
-  }
-
-  async get<P extends Path<T>>(prop: P): Promise<PathValue<T, P>> {
-    const key = this.getKey(prop)
-    const cached = await cache.get(key)
-    if (cached) {
-      return cached
-    }
-
-    return this.getNestedValue(this.defaultValues, prop)
-  }
-
-  async set<P extends Path<T>>(
-    prop: P,
-    value: PathValue<T, P>
-  ): Promise<boolean> {
-    const key = this.getKey(prop)
-    const set = await cache.set(key, value)
-    if (!set) {
-      return false
-    }
-
-    this.setNestedValue(this.defaultValues, prop, value)
-    return true
-  }
-
-  private getNestedValue(obj: any, path: string): any {
-    return path.split('.').reduce((acc, part) => acc?.[part], obj)
-  }
-
-  private setNestedValue(obj: any, path: string, value: any): void {
-    const parts = path.split('.')
-    const lastPart = parts.pop()!
-    const target = parts.reduce((acc, part) => {
-      if (!(part in acc)) acc[part] = {}
-      return acc[part]
-    }, obj)
-    target[lastPart] = value
-  }
-
-  private getKey(prop: Path<any>): string {
-    return `nextastic.${this.name}.${prop}`
-  }
-}
+      /**
+       * The password for the queue dashboard
+       * @default undefined
+       */
+      dashboardPassword: process.env.QUEUE_DASHBOARD_PASSWORD,
+    },
+    redis: {
+      /**
+       * The Redis host or connection URL
+       * @default '127.0.0.1'
+       */
+      host: process.env.REDIS_HOST ?? '127.0.0.1',
+    },
+  },
+})

@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import { dbClient } from '@nextastic/db'
 
 export default function Home() {
   return (
