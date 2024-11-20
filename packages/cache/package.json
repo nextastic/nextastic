@@ -1,6 +1,6 @@
 {
   "name": "@nextastic/cache",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Cache provider to store and retrieve data.  ",
   "repository": {
     "type": "git",
