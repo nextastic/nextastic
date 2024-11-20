@@ -1,5 +1,20 @@
 # testapp
 
+## 2.0.0
+
+### Major Changes
+
+- fb718ed: Updated all to use @nextastic/config instead of env vars
+
+### Patch Changes
+
+- Updated dependencies [fb718ed]
+- Updated dependencies [e30b973]
+- Updated dependencies [e30b973]
+  - @nextastic/queue@1.0.0
+  - @nextastic/http@3.0.0
+  - @nextastic/db@3.0.0
+
 ## 1.1.7
 
 ### Patch Changes
