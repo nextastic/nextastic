@@ -1,5 +1,11 @@
 # @nextastic/queue
 
+## 2.0.1
+
+### Patch Changes
+
+- ceee467: Fix invalid bullmq settings
+
 ## 2.0.0
 
 ### Major Changes
