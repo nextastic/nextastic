@@ -18,19 +18,18 @@ export async function startDashboard(queues: string[]) {
 
   const app = express()
 
-  // Apply auth middleware to all routes
-
   const username = config.queue.dashboardUsername
   const password = config.queue.dashboardPassword
   const hasPassword = password !== undefined
   if (hasPassword) {
-    // Add auth to require password for access
+    // Add auth to require password only for /jobs routes
     const auth = basicAuth({
       users: { [username]: password },
       challenge: true, // Will show browser prompt
     })
 
-    app.use(auth)
+    // Move auth middleware to only protect /jobs route
+    app.use('/jobs', auth)
   }
 
   app.use('/jobs', serverAdapter.getRouter())
