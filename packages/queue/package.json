@@ -1,6 +1,6 @@
 {
   "name": "@nextastic/queue",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Queue provides an API to run background jobs for your application.",
   "repository": {
     "type": "git",
