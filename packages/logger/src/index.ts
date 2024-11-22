@@ -1,15 +1,11 @@
-import pino, { LevelWithSilentOrString } from 'pino'
 import { config } from '@nextastic/config'
 
-export const logger = pino({
-  level: config.app.logLevel as LevelWithSilentOrString,
-  transport: {
-    target: 'pino-pretty',
-    options: {
-      colorize: true,
-      ignore: 'pid,hostname',
-      messageFormat: '{msg}',
-      translateTime: false,
-    },
-  },
+import winston, { format, transports as winstonTransports } from 'winston'
+
+const transports = [new winstonTransports.Console()]
+
+export const logger = winston.createLogger({
+  level: config.app.logLevel,
+  format: format.combine(format.errors({ stack: true }), format.json()),
+  transports: transports,
 })
