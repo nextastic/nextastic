@@ -1,5 +1,13 @@
 # testapp
 
+## 2.0.3
+
+### Patch Changes
+
+- Updated dependencies [456e6b2]
+- Updated dependencies [7188c18]
+  - @nextastic/queue@2.1.0
+
 ## 2.0.2
 
 ### Patch Changes

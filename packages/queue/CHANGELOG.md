@@ -1,5 +1,15 @@
 # @nextastic/queue
 
+## 2.1.0
+
+### Minor Changes
+
+- 7188c18: Add job timeout
+
+### Patch Changes
+
+- 456e6b2: Only protect /jobs route with auth
+
 ## 2.0.1
 
 ### Patch Changes
