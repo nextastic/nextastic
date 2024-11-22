@@ -1,5 +1,11 @@
 # @nextastic/eslint
 
+## 4.0.0
+
+### Major Changes
+
+- acb6e5c: Revert to eslint 8
+
 ## 3.0.0
 
 ### Major Changes
