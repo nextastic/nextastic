@@ -28,6 +28,7 @@ export async function work(params: WorkParams) {
           data: JSON.stringify(job.data),
         })
         const definedJob = jobs[job.name]
+
         if (!definedJob) {
           logger.debug(`Missing job handler" ${job.name}`, {
             event: 'job.missing_handler',
@@ -47,6 +48,7 @@ export async function work(params: WorkParams) {
                 data: JSON.stringify(job.data),
               })
             },
+            timeoutSecs: job.data?._nxtc_job_options?.timeoutMs,
           }) // Ignore TS, as already type-safe when accessing hadnle
           logger.debug(`Completed job: ${job.name}`, {
             event: 'job.complete',
