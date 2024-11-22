@@ -1,5 +1,12 @@
 # @nextastic/queue
 
+## 2.1.1
+
+### Patch Changes
+
+- Updated dependencies [853e93b]
+  - @nextastic/logger@3.0.0
+
 ## 2.1.0
 
 ### Minor Changes

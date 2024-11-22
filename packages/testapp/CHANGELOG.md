@@ -1,5 +1,14 @@
 # testapp
 
+## 2.0.4
+
+### Patch Changes
+
+- 4366867: Install jest to fix lint
+- Updated dependencies [853e93b]
+  - @nextastic/eslint-config@3.0.0
+  - @nextastic/queue@2.1.1
+
 ## 2.0.3
 
 ### Patch Changes
