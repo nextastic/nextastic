@@ -1,6 +1,6 @@
 {
   "name": "@nextastic/http",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Strongly typed http helpers for client, and server.",
   "repository": {
     "type": "git",
