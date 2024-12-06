@@ -1,5 +1,11 @@
 # @nextastic/queue
 
+## 2.3.0
+
+### Minor Changes
+
+- 1f8b1b7: Expose queue startDashboard function
+
 ## 2.2.0
 
 ### Minor Changes
