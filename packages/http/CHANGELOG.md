@@ -1,5 +1,12 @@
 # @nextastic/http
 
+## 4.0.1
+
+### Patch Changes
+
+- Updated dependencies [8801e75]
+  - @nextastic/config@2.1.0
+
 ## 4.0.0
 
 ### Major Changes

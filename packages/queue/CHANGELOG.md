@@ -1,5 +1,18 @@
 # @nextastic/queue
 
+## 2.2.0
+
+### Minor Changes
+
+- 8801e75: Add the ability to specify a different default queue
+
+### Patch Changes
+
+- 22adfb3: Only require queue name when scheduling jobs
+- Updated dependencies [8801e75]
+  - @nextastic/config@2.1.0
+  - @nextastic/logger@3.0.1
+
 ## 2.1.1
 
 ### Patch Changes

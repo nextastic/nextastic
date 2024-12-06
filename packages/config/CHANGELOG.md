@@ -1,5 +1,11 @@
 # @nextastic/config
 
+## 2.1.0
+
+### Minor Changes
+
+- 8801e75: Add the ability to specify a different default queue
+
 ## 2.0.0
 
 ### Major Changes
