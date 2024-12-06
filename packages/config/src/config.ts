@@ -71,6 +71,13 @@ export const config = {
      * @default undefined
      */
     dashboardPassword: process.env.QUEUE_DASHBOARD_PASSWORD,
+
+    /**
+     * The default queue name
+     * @env QUEUE_DEFAULT_QUEUE_NAME
+     * @default 'default'
+     */
+    defaultQueueName: process.env.QUEUE_DEFAULT_QUEUE_NAME ?? 'default',
   },
   redis: {
     /**

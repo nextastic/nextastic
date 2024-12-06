@@ -14,9 +14,13 @@ export interface DispatchOptions extends JobsOptions {
 export const dispatch = async (
   name: string,
   data: any,
-  options: DispatchOptions = {}
+  options: DispatchOptions = {},
 ) => {
-  const { queue = 'default', timeoutSecs, ...jobOptions } = options
+  const {
+    queue = config.queue.defaultQueueName,
+    timeoutSecs,
+    ...jobOptions
+  } = options
 
   if (config.queue.driver === 'sync') {
     return syncQueue.add(name, data, jobOptions)
@@ -30,6 +34,6 @@ export const dispatch = async (
         timeoutMs: timeoutSecs,
       },
     },
-    jobOptions
+    jobOptions,
   )
 }
