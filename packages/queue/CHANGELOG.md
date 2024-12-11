@@ -1,5 +1,11 @@
 # @nextastic/queue
 
+## 2.3.1
+
+### Patch Changes
+
+- 2166018: Rename timeoutMs option to timeoutSecs
+
 ## 2.3.0
 
 ### Minor Changes
