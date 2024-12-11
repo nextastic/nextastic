@@ -1,9 +1,9 @@
 export class JobExceededTimeoutException extends Error {
   data?: Record<string, any>
-  timeoutMs?: number
-  constructor(message?: string, data?: any, timeoutMs?: number) {
+  timeoutSecs?: number
+  constructor(message?: string, data?: any, timeoutSecs?: number) {
     super(message ?? 'Job exceeded timeout')
     this.data = data
-    this.timeoutMs = timeoutMs
+    this.timeoutSecs = timeoutSecs
   }
 }

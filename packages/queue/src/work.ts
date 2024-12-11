@@ -48,7 +48,7 @@ export async function work(params: WorkParams) {
                 data: JSON.stringify(job.data),
               })
             },
-            timeoutSecs: job.data?._nxtc_job_options?.timeoutMs,
+            timeoutSecs: job.data?._nxtc_job_options?.timeoutSecs,
           }) // Ignore TS, as already type-safe when accessing hadnle
           logger.debug(`Completed job: ${job.name}`, {
             event: 'job.complete',
@@ -87,7 +87,7 @@ export async function work(params: WorkParams) {
           count: config.queue.maxFailedJobs,
         },
         lockDuration: config.queue.jobTimeoutMs,
-      }
+      },
     ) as any
 
     // eslint-disable-next-line no-console

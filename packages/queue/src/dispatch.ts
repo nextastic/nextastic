@@ -31,7 +31,7 @@ export const dispatch = async (
     {
       ...data,
       _nxtc_job_options: {
-        timeoutMs: timeoutSecs,
+        timeoutSecs,
       },
     },
     jobOptions,

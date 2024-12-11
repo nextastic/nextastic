@@ -19,7 +19,7 @@ export const syncQueue = {
       log: (message: string) => {
         console.log(message)
       },
-      timeoutSecs: data?._nxtc_job_options?.timeoutMs,
+      timeoutSecs: data?._nxtc_job_options?.timeoutSecs,
     })
   },
   getRepeatableJobs: () => [],
