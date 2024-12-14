@@ -3,7 +3,7 @@ import { Queue } from './types'
 
 interface ScheduleJobsParams {
   queues: Pick<Queue, 'name'>[]
-  schedule: () => void
+  schedule: () => Promise<void>
 }
 
 export async function scheduleJobs(params: ScheduleJobsParams) {
@@ -21,7 +21,7 @@ export async function scheduleJobs(params: ScheduleJobsParams) {
     }
   }
 
-  schedule()
+  await schedule()
 
   // eslint-disable-next-line no-console
   console.log('Scheduled jobs added.')
