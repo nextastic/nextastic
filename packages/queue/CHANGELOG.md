@@ -1,5 +1,11 @@
 # @nextastic/queue
 
+## 2.3.2
+
+### Patch Changes
+
+- 052625b: wait for jobs to finish scheduling
+
 ## 2.3.1
 
 ### Patch Changes
