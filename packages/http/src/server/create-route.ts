@@ -12,7 +12,7 @@ export function createRoute<
   TQuery,
   TResponse,
   TExpectsFormData,
-  TRouteParams
+  TRouteParams,
 >(
   config: {
     body?: TBody
@@ -36,14 +36,14 @@ export function createRoute<
       : null
   }) => TResponse extends z.AnyZodObject
     ? Promise<NextResponse<z.infer<TResponse>>>
-    : Promise<NextResponse<Record<PropertyKey, never>>>
+    : Promise<NextResponse<Record<PropertyKey, never>>>,
 ) {
   return async (
     request: NextRequest,
-    options: { params?: Record<string, string> } = {}
+    options: { params: Promise<Record<string, string>> },
   ) => {
     return handleExceptions(async () => {
-      const { params = {} } = options
+      const { params } = options
 
       const data = config.body as z.AnyZodObject | undefined
       const body = (await parseBody(data, request)) as any
@@ -57,7 +57,7 @@ export function createRoute<
         | undefined
       const routeParams = (await parseRouteParams(
         requiredRouteParams,
-        params
+        await params,
       )) as any
 
       try {
@@ -100,7 +100,7 @@ export function createRoute<
               stack_trace: error.stack?.split('\n'),
               data: 'data' in error ? error.data : null,
             },
-            { status: 500 }
+            { status: 500 },
           )
         }
 
@@ -112,7 +112,7 @@ export function createRoute<
 
 async function parseBody<TBodyParams extends z.AnyZodObject>(
   bodyParams: TBodyParams | undefined,
-  request: NextRequest
+  request: NextRequest,
 ) {
   if (!bodyParams) {
     return null
@@ -188,7 +188,7 @@ const createMessageFromZodIssue = (issue: z.ZodIssue) => {
 
 async function parseQuery<TQueryParams extends z.AnyZodObject>(
   queryParmas: TQueryParams | undefined,
-  contextParams: Record<string, string> = {}
+  contextParams: Record<string, string> = {},
 ) {
   if (!queryParmas) {
     return null
@@ -211,7 +211,7 @@ async function parseQuery<TQueryParams extends z.AnyZodObject>(
 
 async function parseRouteParams<TRouteParams extends z.AnyZodObject>(
   routeParams: TRouteParams | undefined,
-  contextParams: Record<string, string> = {}
+  contextParams: Record<string, string>,
 ) {
   if (!routeParams) {
     return null
