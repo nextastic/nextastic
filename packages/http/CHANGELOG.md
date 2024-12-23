@@ -1,5 +1,11 @@
 # @nextastic/http
 
+## 5.0.0
+
+### Major Changes
+
+- 40bb30d: Support next.js 15 promise params
+
 ## 4.0.1
 
 ### Patch Changes
