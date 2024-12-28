@@ -1,5 +1,12 @@
 # @nextastic/eslint
 
+## 5.0.0
+
+### Major Changes
+
+- f3ecdff: Upgrade to Next 15 & Eslint 9
+- f3ecdff: Upgrade to eslint 9
+
 ## 4.0.0
 
 ### Major Changes
@@ -10,7 +17,8 @@
 
 ### Major Changes
 
-- 853e93b: Switched logger to winston to fix next.js build. update eslint config/
+- 853e93b: Switched logger to winston to fix next.js build. update eslint
+  config/
 
 ## 2.0.0
 

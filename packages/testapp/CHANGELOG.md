@@ -1,5 +1,17 @@
 # testapp
 
+## 3.0.0
+
+### Major Changes
+
+- f3ecdff: Upgrade to Next 15 & Eslint 9
+
+### Patch Changes
+
+- Updated dependencies [f3ecdff]
+- Updated dependencies [f3ecdff]
+  - @nextastic/eslint-config@5.0.0
+
 ## 2.0.10
 
 ### Patch Changes
