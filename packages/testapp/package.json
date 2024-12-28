@@ -19,20 +19,26 @@
     "@nextastic/http": "workspace:*",
     "@nextastic/queue": "workspace:*",
     "dotenv-cli": "^7.4.2",
-    "next": "14.2.15",
-    "react": "^18",
-    "react-dom": "^18"
+    "next": "15.1.3",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.15",
+    "@types/react": "19.0.2",
+    "@types/react-dom": "19.0.2",
+    "eslint": "^9.17.0",
+    "eslint-config-next": "15.1.3",
     "jest": "^29.7.0",
     "node-pg-migrate": "^6.2.2",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.0.2",
+      "@types/react-dom": "19.0.2"
+    }
   }
 }

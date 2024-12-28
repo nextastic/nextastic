@@ -1,8 +1,8 @@
-// index.js
 module.exports = {
-  extends: ['next/core-web-vitals', 'plugin:jest/recommended'],
+  extends: ['plugin:jest/recommended'],
   plugins: ['@typescript-eslint/eslint-plugin', 'jest'],
   rules: {
+    '@typescript-eslint/no-explicit-any': 'off',
     'no-console': 'warn',
     '@typescript-eslint/no-unused-vars': [
       'warn',
@@ -15,4 +15,12 @@ module.exports = {
     'jest/no-test-callback': 'off',
     'jest/no-conditional-expect': 'off',
   },
+  overrides: [
+    {
+      files: ['*.d.ts'],
+      rules: {
+        '@typescript-eslint/no-unused-vars': 'off',
+      },
+    },
+  ],
 }
