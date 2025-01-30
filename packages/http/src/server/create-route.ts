@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  HttpException,
   InternalServerErrorException,
   NotFoundException,
 } from './exceptions'
@@ -92,6 +93,10 @@ export function createRoute<
           return response
         }
       } catch (error) {
+        if (error instanceof HttpException) {
+          return NextResponse.json(error.metadata, { status: error.status })
+        }
+
         if (error instanceof Error) {
           return NextResponse.json(
             {

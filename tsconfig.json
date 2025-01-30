@@ -1,1 +1,12 @@
-{}
+{
+  "compilerOptions": {
+    "types": ["jest", "node"],
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ESNext",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "skipLibCheck": true
+  }
+}
