@@ -1,5 +1,11 @@
 # @nextastic/db
 
+## 5.0.1
+
+### Patch Changes
+
+- Fix incorrect package name node-pg-migrate
+
 ## 5.0.0
 
 ### Major Changes
