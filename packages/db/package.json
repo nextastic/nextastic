@@ -1,6 +1,6 @@
 {
   "name": "@nextastic/db",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Database utils to create migrations and types.",
   "type": "module",
   "repository": {
@@ -43,15 +43,15 @@
     "@types/ws": "^8.5.13",
     "minimist": "^1.2.8",
     "tsup": "^8.3.0",
-    "typescript": "^5.4.5",
-    "node-pg-migrate": "^7.9",
-    "ts-node": "^10"
+    "typescript": "^5.4.5"
   },
   "dependencies": {
     "@nextastic/config": "workspace:*",
     "kysely": "^0.27.4",
     "pg": "^8.13.0",
     "pg-connection-from-env": "^1.1.0",
-    "zapatos": "^6.4.0"
+    "zapatos": "^6.4.0",
+    "node-pg-migrate": "^7.9",
+    "ts-node": "^10"
   }
 }

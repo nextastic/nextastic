@@ -1,5 +1,11 @@
 # @nextastic/db
 
+## 5.0.2
+
+### Patch Changes
+
+- Move deps to dependencies
+
 ## 5.0.1
 
 ### Patch Changes
