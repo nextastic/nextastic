@@ -1,5 +1,12 @@
 # testapp
 
+## 3.0.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @nextastic/db@5.0.0
+
 ## 3.0.0
 
 ### Major Changes

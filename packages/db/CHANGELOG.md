@@ -1,5 +1,11 @@
 # @nextastic/db
 
+## 5.0.0
+
+### Major Changes
+
+- Update node-pg-migrate to 7
+
 ## 4.0.1
 
 ### Patch Changes
