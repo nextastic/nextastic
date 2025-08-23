@@ -1,5 +1,11 @@
 # @nextastic/http
 
+## 5.1.0
+
+### Minor Changes
+
+- 1ca5f95: Add middleware to routes
+
 ## 5.0.0
 
 ### Major Changes
