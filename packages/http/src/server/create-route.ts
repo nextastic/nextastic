@@ -12,7 +12,7 @@ type Middleware<MInRequest = any, MOutRequest = any> = (
   req: MInRequest,
 ) => MOutRequest | NextResponse | Promise<MOutRequest | NextResponse>
 
-type BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams> = {
+export type BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams> = {
   body: TBody extends z.ZodObject<any>
     ? TExpectsFormData extends boolean
       ? FormData
@@ -69,8 +69,8 @@ export function createRoute<
     routeParams?: TRouteParams
     middlewares: [
       (
-        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>
-      ) => M1 | NextResponse | Promise<M1 | NextResponse>
+        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
+      ) => M1 | NextResponse | Promise<M1 | NextResponse>,
     ]
   },
   handleRequest: (
@@ -100,9 +100,9 @@ export function createRoute<
     routeParams?: TRouteParams
     middlewares: [
       (
-        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>
+        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
       ) => M1 | NextResponse | Promise<M1 | NextResponse>,
-      (req: M1) => M2 | NextResponse | Promise<M2 | NextResponse>
+      (req: M1) => M2 | NextResponse | Promise<M2 | NextResponse>,
     ]
   },
   handleRequest: (
@@ -133,10 +133,10 @@ export function createRoute<
     routeParams?: TRouteParams
     middlewares: [
       (
-        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>
+        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
       ) => M1 | NextResponse | Promise<M1 | NextResponse>,
       (req: M1) => M2 | NextResponse | Promise<M2 | NextResponse>,
-      (req: M2) => M3 | NextResponse | Promise<M3 | NextResponse>
+      (req: M2) => M3 | NextResponse | Promise<M3 | NextResponse>,
     ]
   },
   handleRequest: (
@@ -168,11 +168,11 @@ export function createRoute<
     routeParams?: TRouteParams
     middlewares: [
       (
-        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>
+        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
       ) => M1 | NextResponse | Promise<M1 | NextResponse>,
       (req: M1) => M2 | NextResponse | Promise<M2 | NextResponse>,
       (req: M2) => M3 | NextResponse | Promise<M3 | NextResponse>,
-      (req: M3) => M4 | NextResponse | Promise<M4 | NextResponse>
+      (req: M3) => M4 | NextResponse | Promise<M4 | NextResponse>,
     ]
   },
   handleRequest: (
@@ -205,12 +205,12 @@ export function createRoute<
     routeParams?: TRouteParams
     middlewares: [
       (
-        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>
+        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
       ) => M1 | NextResponse | Promise<M1 | NextResponse>,
       (req: M1) => M2 | NextResponse | Promise<M2 | NextResponse>,
       (req: M2) => M3 | NextResponse | Promise<M3 | NextResponse>,
       (req: M3) => M4 | NextResponse | Promise<M4 | NextResponse>,
-      (req: M4) => M5 | NextResponse | Promise<M5 | NextResponse>
+      (req: M4) => M5 | NextResponse | Promise<M5 | NextResponse>,
     ]
   },
   handleRequest: (
@@ -244,13 +244,13 @@ export function createRoute<
     routeParams?: TRouteParams
     middlewares: [
       (
-        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>
+        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
       ) => M1 | NextResponse | Promise<M1 | NextResponse>,
       (req: M1) => M2 | NextResponse | Promise<M2 | NextResponse>,
       (req: M2) => M3 | NextResponse | Promise<M3 | NextResponse>,
       (req: M3) => M4 | NextResponse | Promise<M4 | NextResponse>,
       (req: M4) => M5 | NextResponse | Promise<M5 | NextResponse>,
-      (req: M5) => M6 | NextResponse | Promise<M6 | NextResponse>
+      (req: M5) => M6 | NextResponse | Promise<M6 | NextResponse>,
     ]
   },
   handleRequest: (
@@ -285,14 +285,14 @@ export function createRoute<
     routeParams?: TRouteParams
     middlewares: [
       (
-        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>
+        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
       ) => M1 | NextResponse | Promise<M1 | NextResponse>,
       (req: M1) => M2 | NextResponse | Promise<M2 | NextResponse>,
       (req: M2) => M3 | NextResponse | Promise<M3 | NextResponse>,
       (req: M3) => M4 | NextResponse | Promise<M4 | NextResponse>,
       (req: M4) => M5 | NextResponse | Promise<M5 | NextResponse>,
       (req: M5) => M6 | NextResponse | Promise<M6 | NextResponse>,
-      (req: M6) => M7 | NextResponse | Promise<M7 | NextResponse>
+      (req: M6) => M7 | NextResponse | Promise<M7 | NextResponse>,
     ]
   },
   handleRequest: (
@@ -328,7 +328,7 @@ export function createRoute<
     routeParams?: TRouteParams
     middlewares: [
       (
-        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>
+        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
       ) => M1 | NextResponse | Promise<M1 | NextResponse>,
       (req: M1) => M2 | NextResponse | Promise<M2 | NextResponse>,
       (req: M2) => M3 | NextResponse | Promise<M3 | NextResponse>,
@@ -336,7 +336,7 @@ export function createRoute<
       (req: M4) => M5 | NextResponse | Promise<M5 | NextResponse>,
       (req: M5) => M6 | NextResponse | Promise<M6 | NextResponse>,
       (req: M6) => M7 | NextResponse | Promise<M7 | NextResponse>,
-      (req: M7) => M8 | NextResponse | Promise<M8 | NextResponse>
+      (req: M7) => M8 | NextResponse | Promise<M8 | NextResponse>,
     ]
   },
   handleRequest: (
@@ -373,7 +373,7 @@ export function createRoute<
     routeParams?: TRouteParams
     middlewares: [
       (
-        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>
+        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
       ) => M1 | NextResponse | Promise<M1 | NextResponse>,
       (req: M1) => M2 | NextResponse | Promise<M2 | NextResponse>,
       (req: M2) => M3 | NextResponse | Promise<M3 | NextResponse>,
@@ -382,7 +382,7 @@ export function createRoute<
       (req: M5) => M6 | NextResponse | Promise<M6 | NextResponse>,
       (req: M6) => M7 | NextResponse | Promise<M7 | NextResponse>,
       (req: M7) => M8 | NextResponse | Promise<M8 | NextResponse>,
-      (req: M8) => M9 | NextResponse | Promise<M9 | NextResponse>
+      (req: M8) => M9 | NextResponse | Promise<M9 | NextResponse>,
     ]
   },
   handleRequest: (
@@ -420,7 +420,7 @@ export function createRoute<
     routeParams?: TRouteParams
     middlewares: [
       (
-        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>
+        req: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
       ) => M1 | NextResponse | Promise<M1 | NextResponse>,
       (req: M1) => M2 | NextResponse | Promise<M2 | NextResponse>,
       (req: M2) => M3 | NextResponse | Promise<M3 | NextResponse>,
@@ -430,7 +430,7 @@ export function createRoute<
       (req: M6) => M7 | NextResponse | Promise<M7 | NextResponse>,
       (req: M7) => M8 | NextResponse | Promise<M8 | NextResponse>,
       (req: M8) => M9 | NextResponse | Promise<M9 | NextResponse>,
-      (req: M9) => M10 | NextResponse | Promise<M10 | NextResponse>
+      (req: M9) => M10 | NextResponse | Promise<M10 | NextResponse>,
     ]
   },
   handleRequest: (

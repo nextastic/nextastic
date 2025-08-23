@@ -1,5 +1,11 @@
 # @nextastic/http
 
+## 5.1.3
+
+### Patch Changes
+
+- export basetype
+
 ## 5.1.2
 
 ### Patch Changes
