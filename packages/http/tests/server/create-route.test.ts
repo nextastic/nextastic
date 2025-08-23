@@ -61,7 +61,7 @@ describe('TypeScript type checking', () => {
           (req: { different: string }) => ({ ...req, user: { id: 'test' } }),
         ],
       },
-      async (req) => {
+      async () => {
         return NextResponse.json({})
       },
     )
@@ -185,7 +185,7 @@ it('should throw BadRequestException for invalid JSON body', async () => {
 
   expect(await res.json()).toEqual({
     type: 'invalid_data',
-    message: 'age is required',
+    message: 'Invalid input: expected number, received undefined for "age"',
     errors: expect.any(Object),
   })
   expect(res.status).toBe(400)
@@ -201,7 +201,7 @@ it('should handle query parameters', async () => {
       response: z.object({
         query: z.object({
           search: z.string(),
-          page: z.number(),
+          page: z.number().optional(),
         }),
       }),
     },

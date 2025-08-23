@@ -118,11 +118,11 @@ it('should handle zod validation errors', async () => {
 
   expect(res.status).toBe(400)
   expect(await res.json()).toMatchObject({
-    message: 'Expected string, received number for "name"',
+    message: 'Invalid input: expected string, received number for "name"',
     type: 'invalid_data',
     errors: {
       name: {
-        _errors: ['Expected string, received number'],
+        _errors: ['Invalid input: expected string, received number'],
       },
     },
   })

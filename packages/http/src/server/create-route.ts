@@ -508,16 +508,16 @@ export function createRoute<
 
         const middlewares = config.middlewares ?? []
         let finalRequest = baseRequest as any
-        
+
         if (middlewares.length > 0) {
           for (const middleware of middlewares) {
             const result = await middleware(finalRequest)
-            
+
             // If middleware returns a NextResponse, short-circuit and return it
             if (result instanceof NextResponse) {
               return result
             }
-            
+
             finalRequest = result
           }
         }
