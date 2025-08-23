@@ -8,6 +8,26 @@ import { handleExceptions } from './exception-handler'
 import { NextRequest, NextResponse } from 'next/server'
 import { ZodError, z } from 'zod'
 
+type Middleware<MInRequest = any, MOutRequest = any> = (
+  req: MInRequest,
+) => MOutRequest | NextResponse | Promise<MOutRequest | NextResponse>
+
+type BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams> = {
+  body: TBody extends z.ZodObject<any>
+    ? TExpectsFormData extends boolean
+      ? FormData
+      : z.infer<TBody>
+    : null
+  headers: NextRequest['headers']
+  cookies: NextRequest['cookies']
+  nextUrl: NextRequest['nextUrl']
+  query: TQuery extends z.ZodObject<any> ? z.infer<TQuery> : null
+  routeParams: TRouteParams extends z.ZodObject<any>
+    ? z.infer<TRouteParams>
+    : null
+}
+
+// Overloads for different numbers of middlewares
 export function createRoute<
   TBody,
   TQuery,
@@ -21,21 +41,436 @@ export function createRoute<
     query?: TQuery
     response?: TResponse
     routeParams?: TRouteParams
+    middlewares?: never
   },
-  handleRequest: (request: {
-    body: TBody extends z.AnyZodObject
-      ? TExpectsFormData extends boolean
-        ? FormData
-        : z.infer<TBody>
-      : null
-    headers: NextRequest['headers']
-    cookies: NextRequest['cookies']
-    nextUrl: NextRequest['nextUrl']
-    query: TQuery extends z.AnyZodObject ? z.infer<TQuery> : null
-    routeParams: TRouteParams extends z.AnyZodObject
-      ? z.infer<TRouteParams>
-      : null
-  }) => TResponse extends z.AnyZodObject
+  handleRequest: (
+    request: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
+  ) => TResponse extends z.ZodObject<any>
+    ? Promise<NextResponse<z.infer<TResponse>>>
+    : Promise<NextResponse<Record<PropertyKey, never>>>,
+): (
+  request: NextRequest,
+  options: { params: Promise<Record<string, string>> },
+) => Promise<NextResponse>
+
+export function createRoute<
+  TBody,
+  TQuery,
+  TResponse,
+  TExpectsFormData,
+  TRouteParams,
+  M1,
+>(
+  config: {
+    body?: TBody
+    isFormData?: TExpectsFormData
+    query?: TQuery
+    response?: TResponse
+    routeParams?: TRouteParams
+    middlewares: [
+      Middleware<
+        BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
+        M1
+      >,
+    ]
+  },
+  handleRequest: (
+    request: M1,
+  ) => TResponse extends z.ZodObject<any>
+    ? Promise<NextResponse<z.infer<TResponse>>>
+    : Promise<NextResponse<Record<PropertyKey, never>>>,
+): (
+  request: NextRequest,
+  options: { params: Promise<Record<string, string>> },
+) => Promise<NextResponse>
+
+export function createRoute<
+  TBody,
+  TQuery,
+  TResponse,
+  TExpectsFormData,
+  TRouteParams,
+  M1,
+  M2,
+>(
+  config: {
+    body?: TBody
+    isFormData?: TExpectsFormData
+    query?: TQuery
+    response?: TResponse
+    routeParams?: TRouteParams
+    middlewares: [
+      Middleware<
+        BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
+        M1
+      >,
+      Middleware<M1, M2>,
+    ]
+  },
+  handleRequest: (
+    request: M2,
+  ) => TResponse extends z.ZodObject<any>
+    ? Promise<NextResponse<z.infer<TResponse>>>
+    : Promise<NextResponse<Record<PropertyKey, never>>>,
+): (
+  request: NextRequest,
+  options: { params: Promise<Record<string, string>> },
+) => Promise<NextResponse>
+
+export function createRoute<
+  TBody,
+  TQuery,
+  TResponse,
+  TExpectsFormData,
+  TRouteParams,
+  M1,
+  M2,
+  M3,
+>(
+  config: {
+    body?: TBody
+    isFormData?: TExpectsFormData
+    query?: TQuery
+    response?: TResponse
+    routeParams?: TRouteParams
+    middlewares: [
+      Middleware<
+        BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
+        M1
+      >,
+      Middleware<M1, M2>,
+      Middleware<M2, M3>,
+    ]
+  },
+  handleRequest: (
+    request: M3,
+  ) => TResponse extends z.ZodObject<any>
+    ? Promise<NextResponse<z.infer<TResponse>>>
+    : Promise<NextResponse<Record<PropertyKey, never>>>,
+): (
+  request: NextRequest,
+  options: { params: Promise<Record<string, string>> },
+) => Promise<NextResponse>
+
+export function createRoute<
+  TBody,
+  TQuery,
+  TResponse,
+  TExpectsFormData,
+  TRouteParams,
+  M1,
+  M2,
+  M3,
+  M4,
+>(
+  config: {
+    body?: TBody
+    isFormData?: TExpectsFormData
+    query?: TQuery
+    response?: TResponse
+    routeParams?: TRouteParams
+    middlewares: [
+      Middleware<
+        BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
+        M1
+      >,
+      Middleware<M1, M2>,
+      Middleware<M2, M3>,
+      Middleware<M3, M4>,
+    ]
+  },
+  handleRequest: (
+    request: M4,
+  ) => TResponse extends z.ZodObject<any>
+    ? Promise<NextResponse<z.infer<TResponse>>>
+    : Promise<NextResponse<Record<PropertyKey, never>>>,
+): (
+  request: NextRequest,
+  options: { params: Promise<Record<string, string>> },
+) => Promise<NextResponse>
+
+export function createRoute<
+  TBody,
+  TQuery,
+  TResponse,
+  TExpectsFormData,
+  TRouteParams,
+  M1,
+  M2,
+  M3,
+  M4,
+  M5,
+>(
+  config: {
+    body?: TBody
+    isFormData?: TExpectsFormData
+    query?: TQuery
+    response?: TResponse
+    routeParams?: TRouteParams
+    middlewares: [
+      Middleware<
+        BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
+        M1
+      >,
+      Middleware<M1, M2>,
+      Middleware<M2, M3>,
+      Middleware<M3, M4>,
+      Middleware<M4, M5>,
+    ]
+  },
+  handleRequest: (
+    request: M5,
+  ) => TResponse extends z.ZodObject<any>
+    ? Promise<NextResponse<z.infer<TResponse>>>
+    : Promise<NextResponse<Record<PropertyKey, never>>>,
+): (
+  request: NextRequest,
+  options: { params: Promise<Record<string, string>> },
+) => Promise<NextResponse>
+
+export function createRoute<
+  TBody,
+  TQuery,
+  TResponse,
+  TExpectsFormData,
+  TRouteParams,
+  M1,
+  M2,
+  M3,
+  M4,
+  M5,
+  M6,
+>(
+  config: {
+    body?: TBody
+    isFormData?: TExpectsFormData
+    query?: TQuery
+    response?: TResponse
+    routeParams?: TRouteParams
+    middlewares: [
+      Middleware<
+        BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
+        M1
+      >,
+      Middleware<M1, M2>,
+      Middleware<M2, M3>,
+      Middleware<M3, M4>,
+      Middleware<M4, M5>,
+      Middleware<M5, M6>,
+    ]
+  },
+  handleRequest: (
+    request: M6,
+  ) => TResponse extends z.ZodObject<any>
+    ? Promise<NextResponse<z.infer<TResponse>>>
+    : Promise<NextResponse<Record<PropertyKey, never>>>,
+): (
+  request: NextRequest,
+  options: { params: Promise<Record<string, string>> },
+) => Promise<NextResponse>
+
+export function createRoute<
+  TBody,
+  TQuery,
+  TResponse,
+  TExpectsFormData,
+  TRouteParams,
+  M1,
+  M2,
+  M3,
+  M4,
+  M5,
+  M6,
+  M7,
+>(
+  config: {
+    body?: TBody
+    isFormData?: TExpectsFormData
+    query?: TQuery
+    response?: TResponse
+    routeParams?: TRouteParams
+    middlewares: [
+      Middleware<
+        BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
+        M1
+      >,
+      Middleware<M1, M2>,
+      Middleware<M2, M3>,
+      Middleware<M3, M4>,
+      Middleware<M4, M5>,
+      Middleware<M5, M6>,
+      Middleware<M6, M7>,
+    ]
+  },
+  handleRequest: (
+    request: M7,
+  ) => TResponse extends z.ZodObject<any>
+    ? Promise<NextResponse<z.infer<TResponse>>>
+    : Promise<NextResponse<Record<PropertyKey, never>>>,
+): (
+  request: NextRequest,
+  options: { params: Promise<Record<string, string>> },
+) => Promise<NextResponse>
+
+export function createRoute<
+  TBody,
+  TQuery,
+  TResponse,
+  TExpectsFormData,
+  TRouteParams,
+  M1,
+  M2,
+  M3,
+  M4,
+  M5,
+  M6,
+  M7,
+  M8,
+>(
+  config: {
+    body?: TBody
+    isFormData?: TExpectsFormData
+    query?: TQuery
+    response?: TResponse
+    routeParams?: TRouteParams
+    middlewares: [
+      Middleware<
+        BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
+        M1
+      >,
+      Middleware<M1, M2>,
+      Middleware<M2, M3>,
+      Middleware<M3, M4>,
+      Middleware<M4, M5>,
+      Middleware<M5, M6>,
+      Middleware<M6, M7>,
+      Middleware<M7, M8>,
+    ]
+  },
+  handleRequest: (
+    request: M8,
+  ) => TResponse extends z.ZodObject<any>
+    ? Promise<NextResponse<z.infer<TResponse>>>
+    : Promise<NextResponse<Record<PropertyKey, never>>>,
+): (
+  request: NextRequest,
+  options: { params: Promise<Record<string, string>> },
+) => Promise<NextResponse>
+
+export function createRoute<
+  TBody,
+  TQuery,
+  TResponse,
+  TExpectsFormData,
+  TRouteParams,
+  M1,
+  M2,
+  M3,
+  M4,
+  M5,
+  M6,
+  M7,
+  M8,
+  M9,
+>(
+  config: {
+    body?: TBody
+    isFormData?: TExpectsFormData
+    query?: TQuery
+    response?: TResponse
+    routeParams?: TRouteParams
+    middlewares: [
+      Middleware<
+        BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
+        M1
+      >,
+      Middleware<M1, M2>,
+      Middleware<M2, M3>,
+      Middleware<M3, M4>,
+      Middleware<M4, M5>,
+      Middleware<M5, M6>,
+      Middleware<M6, M7>,
+      Middleware<M7, M8>,
+      Middleware<M8, M9>,
+    ]
+  },
+  handleRequest: (
+    request: M9,
+  ) => TResponse extends z.ZodObject<any>
+    ? Promise<NextResponse<z.infer<TResponse>>>
+    : Promise<NextResponse<Record<PropertyKey, never>>>,
+): (
+  request: NextRequest,
+  options: { params: Promise<Record<string, string>> },
+) => Promise<NextResponse>
+
+export function createRoute<
+  TBody,
+  TQuery,
+  TResponse,
+  TExpectsFormData,
+  TRouteParams,
+  M1,
+  M2,
+  M3,
+  M4,
+  M5,
+  M6,
+  M7,
+  M8,
+  M9,
+  M10,
+>(
+  config: {
+    body?: TBody
+    isFormData?: TExpectsFormData
+    query?: TQuery
+    response?: TResponse
+    routeParams?: TRouteParams
+    middlewares: [
+      Middleware<
+        BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
+        M1
+      >,
+      Middleware<M1, M2>,
+      Middleware<M2, M3>,
+      Middleware<M3, M4>,
+      Middleware<M4, M5>,
+      Middleware<M5, M6>,
+      Middleware<M6, M7>,
+      Middleware<M7, M8>,
+      Middleware<M8, M9>,
+      Middleware<M9, M10>,
+    ]
+  },
+  handleRequest: (
+    request: M10,
+  ) => TResponse extends z.ZodObject<any>
+    ? Promise<NextResponse<z.infer<TResponse>>>
+    : Promise<NextResponse<Record<PropertyKey, never>>>,
+): (
+  request: NextRequest,
+  options: { params: Promise<Record<string, string>> },
+) => Promise<NextResponse>
+
+export function createRoute<
+  TBody,
+  TQuery,
+  TResponse,
+  TExpectsFormData,
+  TRouteParams,
+>(
+  config: {
+    body?: TBody
+    isFormData?: TExpectsFormData
+    query?: TQuery
+    response?: TResponse
+    routeParams?: TRouteParams
+    middlewares?: Middleware<any, any>[]
+  },
+  handleRequest: (
+    request: any,
+  ) => TResponse extends z.ZodObject<any>
     ? Promise<NextResponse<z.infer<TResponse>>>
     : Promise<NextResponse<Record<PropertyKey, never>>>,
 ) {
@@ -46,15 +481,15 @@ export function createRoute<
     return handleExceptions(async () => {
       const { params } = options
 
-      const data = config.body as z.AnyZodObject | undefined
+      const data = config.body as z.ZodObject<any> | undefined
       const body = (await parseBody(data, request)) as any
 
-      const requiredQueryParams = config.query as z.AnyZodObject | undefined
+      const requiredQueryParams = config.query as z.ZodObject<any> | undefined
       const queryParams = Object.fromEntries(request.nextUrl.searchParams)
       const query = (await parseQuery(requiredQueryParams, queryParams)) as any
 
       const requiredRouteParams = config.routeParams as
-        | z.AnyZodObject
+        | z.ZodObject<any>
         | undefined
       const routeParams = (await parseRouteParams(
         requiredRouteParams,
@@ -62,16 +497,34 @@ export function createRoute<
       )) as any
 
       try {
-        const response = await handleRequest({
+        const baseRequest = {
           body,
           cookies: request.cookies,
           nextUrl: request.nextUrl,
           query,
           routeParams,
           headers: request.headers,
-        })
+        }
 
-        const jsonBody = config.response as z.AnyZodObject | undefined
+        const middlewares = config.middlewares ?? []
+        let finalRequest = baseRequest as any
+        
+        if (middlewares.length > 0) {
+          for (const middleware of middlewares) {
+            const result = await middleware(finalRequest)
+            
+            // If middleware returns a NextResponse, short-circuit and return it
+            if (result instanceof NextResponse) {
+              return result
+            }
+            
+            finalRequest = result
+          }
+        }
+
+        const response = await handleRequest(finalRequest)
+
+        const jsonBody = config.response as z.ZodObject<any> | undefined
         if (!jsonBody) {
           return response as unknown as Promise<
             NextResponse<Record<PropertyKey, never>>
@@ -115,7 +568,7 @@ export function createRoute<
   }
 }
 
-async function parseBody<TBodyParams extends z.AnyZodObject>(
+async function parseBody<TBodyParams extends z.ZodObject<any>>(
   bodyParams: TBodyParams | undefined,
   request: NextRequest,
 ) {
@@ -191,7 +644,7 @@ const createMessageFromZodIssue = (issue: z.ZodIssue) => {
   return `${issue.message} for "${issue.path.join('.')}"`
 }
 
-async function parseQuery<TQueryParams extends z.AnyZodObject>(
+async function parseQuery<TQueryParams extends z.ZodObject<any>>(
   queryParmas: TQueryParams | undefined,
   contextParams: Record<string, string> = {},
 ) {
@@ -214,7 +667,7 @@ async function parseQuery<TQueryParams extends z.AnyZodObject>(
   }
 }
 
-async function parseRouteParams<TRouteParams extends z.AnyZodObject>(
+async function parseRouteParams<TRouteParams extends z.ZodObject<any>>(
   routeParams: TRouteParams | undefined,
   contextParams: Record<string, string>,
 ) {
