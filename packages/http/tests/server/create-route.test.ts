@@ -645,17 +645,17 @@ it('should short-circuit when middleware returns NextResponse', async () => {
 it('should handle async middleware', async () => {
   // Mock async operations
   const fetchUserFromDB = async (userId: string) => {
-    await new Promise(resolve => setTimeout(resolve, 10)) // Simulate DB delay
+    await new Promise((resolve) => setTimeout(resolve, 10)) // Simulate DB delay
     return {
       id: userId,
       name: `User-${userId}`,
       role: userId === 'admin' ? 'admin' : 'user',
-      permissions: userId === 'admin' ? ['read', 'write', 'delete'] : ['read']
+      permissions: userId === 'admin' ? ['read', 'write', 'delete'] : ['read'],
     }
   }
 
   const logActivity = async (action: string, userId: string) => {
-    await new Promise(resolve => setTimeout(resolve, 5)) // Simulate logging delay
+    await new Promise((resolve) => setTimeout(resolve, 5)) // Simulate logging delay
     return `${new Date().toISOString()}: ${userId} performed ${action}`
   }
 
@@ -679,11 +679,11 @@ it('should handle async middleware', async () => {
         // Async auth middleware - fetches user from "database"
         async (req) => {
           const user = await fetchUserFromDB(req.body.userId)
-          
+
           if (!user) {
             return NextResponse.json(
               { error: 'User not found' },
-              { status: 404 }
+              { status: 404 },
             )
           }
 
@@ -692,10 +692,10 @@ it('should handle async middleware', async () => {
             user,
           }
         },
-        // Async logging middleware - logs the activity  
+        // Async logging middleware - logs the activity
         async (req) => {
           const activityLog = await logActivity(req.body.action, req.user.id)
-          
+
           return {
             ...req,
             activityLog,
@@ -707,7 +707,7 @@ it('should handle async middleware', async () => {
           if (req.body.action === 'delete' && req.user.role !== 'admin') {
             return NextResponse.json(
               { error: 'Insufficient permissions', required: 'admin' },
-              { status: 403 }
+              { status: 403 },
             )
           }
 
@@ -797,7 +797,7 @@ it('should handle mixed sync and async middleware', async () => {
         }),
         // Async middleware
         async (req) => {
-          await new Promise(resolve => setTimeout(resolve, 5))
+          await new Promise((resolve) => setTimeout(resolve, 5))
           return {
             ...req,
             step2: 'async-step-2',
@@ -812,7 +812,7 @@ it('should handle mixed sync and async middleware', async () => {
         }),
         // Another async middleware
         async (req) => {
-          await new Promise(resolve => setTimeout(resolve, 5))
+          await new Promise((resolve) => setTimeout(resolve, 5))
           return {
             ...req,
             step4: 'async-step-4',
@@ -840,9 +840,11 @@ it('should handle mixed sync and async middleware', async () => {
   expect(res.status).toBe(200)
   expect(result.steps).toEqual([
     'sync-step-1',
-    'async-step-2', 
+    'async-step-2',
     'sync-step-3',
-    'async-step-4'
+    'async-step-4',
   ])
-  expect(result.result).toBe('Completed: sync-step-1 -> async-step-2 -> sync-step-3 -> async-step-4')
+  expect(result.result).toBe(
+    'Completed: sync-step-1 -> async-step-2 -> sync-step-3 -> async-step-4',
+  )
 })
