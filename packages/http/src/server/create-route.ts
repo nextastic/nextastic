@@ -10,7 +10,7 @@ import { ZodError, z } from 'zod'
 
 type Middleware<MInRequest = any, MOutRequest = any> = (
   req: MInRequest,
-) => MOutRequest
+) => MOutRequest | NextResponse | Promise<MOutRequest | NextResponse>
 
 type BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams> = {
   body: TBody extends z.AnyZodObject
@@ -507,13 +507,20 @@ export function createRoute<
         }
 
         const middlewares = config.middlewares ?? []
-        const finalRequest =
-          middlewares.length > 0
-            ? middlewares.reduce(
-                (req, middleware) => middleware(req),
-                baseRequest as any,
-              )
-            : baseRequest
+        let finalRequest = baseRequest as any
+        
+        if (middlewares.length > 0) {
+          for (const middleware of middlewares) {
+            const result = await middleware(finalRequest)
+            
+            // If middleware returns a NextResponse, short-circuit and return it
+            if (result instanceof NextResponse) {
+              return result
+            }
+            
+            finalRequest = result
+          }
+        }
 
         const response = await handleRequest(finalRequest)
 
