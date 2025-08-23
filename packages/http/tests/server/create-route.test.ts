@@ -400,3 +400,148 @@ it('should handle inline middleware without explicit types', async () => {
   expect(result.userEmail).toBe('test@example.com')
   expect(typeof result.timestamp).toBe('number')
 })
+
+it('should handle many middlewares (up to 10)', async () => {
+  const route = createRoute(
+    {
+      body: z.object({ input: z.string() }),
+      response: z.object({ result: z.string() }),
+      middlewares: [
+        (req) => ({ ...req, step1: 'a' }),
+        (req) => ({ ...req, step2: req.step1 + 'b' }),
+        (req) => ({ ...req, step3: req.step2 + 'c' }),
+        (req) => ({ ...req, step4: req.step3 + 'd' }),
+        (req) => ({ ...req, step5: req.step4 + 'e' }),
+        (req) => ({ ...req, final: `${req.body.input}-${req.step5}` }),
+      ],
+    },
+    async (req) => {
+      expect(req.step1).toBe('a')
+      expect(req.step2).toBe('ab')
+      expect(req.step3).toBe('abc')
+      expect(req.step4).toBe('abcd')
+      expect(req.step5).toBe('abcde')
+      expect(req.final).toBe('test-abcde')
+      expect(req.body.input).toBe('test')
+
+      return NextResponse.json({
+        result: req.final,
+      })
+    },
+  )
+
+  const request = new NextRequest('http://localhost/api/test', {
+    method: 'POST',
+    body: JSON.stringify({ input: 'test' }),
+  })
+
+  const res = await route(request, { params: Promise.resolve({}) })
+  expect(await res.json()).toEqual({ result: 'test-abcde' })
+})
+
+it('should handle compound middleware with single function', async () => {
+  // Single compound middleware function that does multiple transformations
+  const WithCompoundMiddleware = (req: { body: { userId: string; action: string }; headers: any; cookies: any; nextUrl: any; query: null; routeParams: null }) => {
+    // Simulate multiple middleware operations in one function
+    const withUser = {
+      ...req,
+      user: {
+        id: req.body.userId,
+        name: `User-${req.body.userId}`,
+        role: 'admin',
+      },
+    }
+
+    const withTimestamp = {
+      ...withUser,
+      timestamp: Date.now(),
+      requestId: `req-${Math.random().toString(36).substr(2, 9)}`,
+    }
+
+    const withPermissions = {
+      ...withTimestamp,
+      permissions: [`read:${withUser.user.id}`, `write:${withUser.user.id}`, 'delete'],
+      session: {
+        active: true,
+        expires: withTimestamp.timestamp + 3600000, // 1 hour
+      },
+    }
+
+    const withAudit = {
+      ...withPermissions,
+      auditTrail: {
+        action: req.body.action,
+        user: withPermissions.user.name,
+        timestamp: withPermissions.timestamp,
+        permissions: withPermissions.permissions,
+        metadata: `${withPermissions.user.name} with role ${withPermissions.user.role} performed ${req.body.action}`,
+      },
+    }
+
+    return withAudit
+  }
+
+  const route = createRoute(
+    {
+      body: z.object({
+        userId: z.string(),
+        action: z.string(),
+      }),
+      response: z.object({
+        success: z.boolean(),
+        data: z.object({
+          user: z.string(),
+          action: z.string(),
+          requestId: z.string(),
+          permissions: z.array(z.string()),
+          auditMessage: z.string(),
+        }),
+      }),
+      middlewares: [WithCompoundMiddleware],
+    },
+    async (req) => {
+      // Verify all compound middleware properties are accessible and properly typed
+      expect(req.user.id).toBe('user456')
+      expect(req.user.name).toBe('User-user456')
+      expect(req.user.role).toBe('admin')
+      expect(typeof req.timestamp).toBe('number')
+      expect(req.requestId).toMatch(/^req-[a-z0-9]{9}$/)
+      expect(req.permissions).toEqual(['read:user456', 'write:user456', 'delete'])
+      expect(req.session.active).toBe(true)
+      expect(typeof req.session.expires).toBe('number')
+      expect(req.auditTrail.action).toBe('create')
+      expect(req.auditTrail.user).toBe('User-user456')
+      expect(req.auditTrail.metadata).toContain('User-user456 with role admin performed create')
+      
+      // Original request properties should still be accessible
+      expect(req.body.userId).toBe('user456')
+      expect(req.body.action).toBe('create')
+
+      return NextResponse.json({
+        success: true,
+        data: {
+          user: req.user.name,
+          action: req.auditTrail.action,
+          requestId: req.requestId,
+          permissions: req.permissions,
+          auditMessage: req.auditTrail.metadata,
+        },
+      })
+    },
+  )
+
+  const request = new NextRequest('http://localhost/api/test', {
+    method: 'POST',
+    body: JSON.stringify({ userId: 'user456', action: 'create' }),
+  })
+
+  const res = await route(request, { params: Promise.resolve({}) })
+  const result = await res.json()
+
+  expect(result.success).toBe(true)
+  expect(result.data.user).toBe('User-user456')
+  expect(result.data.action).toBe('create')
+  expect(result.data.permissions).toEqual(['read:user456', 'write:user456', 'delete'])
+  expect(result.data.auditMessage).toContain('User-user456 with role admin performed create')
+  expect(result.data.requestId).toMatch(/^req-[a-z0-9]{9}$/)
+})
