@@ -1,5 +1,11 @@
 # @nextastic/http
 
+## 5.1.2
+
+### Patch Changes
+
+- Fix missing http async
+
 ## 5.1.1
 
 ### Patch Changes
