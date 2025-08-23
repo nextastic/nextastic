@@ -13,7 +13,7 @@ type Middleware<MInRequest = any, MOutRequest = any> = (
 ) => MOutRequest | NextResponse | Promise<MOutRequest | NextResponse>
 
 type BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams> = {
-  body: TBody extends z.AnyZodObject
+  body: TBody extends z.ZodObject<any>
     ? TExpectsFormData extends boolean
       ? FormData
       : z.infer<TBody>
@@ -21,8 +21,8 @@ type BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams> = {
   headers: NextRequest['headers']
   cookies: NextRequest['cookies']
   nextUrl: NextRequest['nextUrl']
-  query: TQuery extends z.AnyZodObject ? z.infer<TQuery> : null
-  routeParams: TRouteParams extends z.AnyZodObject
+  query: TQuery extends z.ZodObject<any> ? z.infer<TQuery> : null
+  routeParams: TRouteParams extends z.ZodObject<any>
     ? z.infer<TRouteParams>
     : null
 }
@@ -45,7 +45,7 @@ export function createRoute<
   },
   handleRequest: (
     request: BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
-  ) => TResponse extends z.AnyZodObject
+  ) => TResponse extends z.ZodObject<any>
     ? Promise<NextResponse<z.infer<TResponse>>>
     : Promise<NextResponse<Record<PropertyKey, never>>>,
 ): (
@@ -76,7 +76,7 @@ export function createRoute<
   },
   handleRequest: (
     request: M1,
-  ) => TResponse extends z.AnyZodObject
+  ) => TResponse extends z.ZodObject<any>
     ? Promise<NextResponse<z.infer<TResponse>>>
     : Promise<NextResponse<Record<PropertyKey, never>>>,
 ): (
@@ -109,7 +109,7 @@ export function createRoute<
   },
   handleRequest: (
     request: M2,
-  ) => TResponse extends z.AnyZodObject
+  ) => TResponse extends z.ZodObject<any>
     ? Promise<NextResponse<z.infer<TResponse>>>
     : Promise<NextResponse<Record<PropertyKey, never>>>,
 ): (
@@ -144,7 +144,7 @@ export function createRoute<
   },
   handleRequest: (
     request: M3,
-  ) => TResponse extends z.AnyZodObject
+  ) => TResponse extends z.ZodObject<any>
     ? Promise<NextResponse<z.infer<TResponse>>>
     : Promise<NextResponse<Record<PropertyKey, never>>>,
 ): (
@@ -181,7 +181,7 @@ export function createRoute<
   },
   handleRequest: (
     request: M4,
-  ) => TResponse extends z.AnyZodObject
+  ) => TResponse extends z.ZodObject<any>
     ? Promise<NextResponse<z.infer<TResponse>>>
     : Promise<NextResponse<Record<PropertyKey, never>>>,
 ): (
@@ -220,7 +220,7 @@ export function createRoute<
   },
   handleRequest: (
     request: M5,
-  ) => TResponse extends z.AnyZodObject
+  ) => TResponse extends z.ZodObject<any>
     ? Promise<NextResponse<z.infer<TResponse>>>
     : Promise<NextResponse<Record<PropertyKey, never>>>,
 ): (
@@ -261,7 +261,7 @@ export function createRoute<
   },
   handleRequest: (
     request: M6,
-  ) => TResponse extends z.AnyZodObject
+  ) => TResponse extends z.ZodObject<any>
     ? Promise<NextResponse<z.infer<TResponse>>>
     : Promise<NextResponse<Record<PropertyKey, never>>>,
 ): (
@@ -304,7 +304,7 @@ export function createRoute<
   },
   handleRequest: (
     request: M7,
-  ) => TResponse extends z.AnyZodObject
+  ) => TResponse extends z.ZodObject<any>
     ? Promise<NextResponse<z.infer<TResponse>>>
     : Promise<NextResponse<Record<PropertyKey, never>>>,
 ): (
@@ -349,7 +349,7 @@ export function createRoute<
   },
   handleRequest: (
     request: M8,
-  ) => TResponse extends z.AnyZodObject
+  ) => TResponse extends z.ZodObject<any>
     ? Promise<NextResponse<z.infer<TResponse>>>
     : Promise<NextResponse<Record<PropertyKey, never>>>,
 ): (
@@ -396,7 +396,7 @@ export function createRoute<
   },
   handleRequest: (
     request: M9,
-  ) => TResponse extends z.AnyZodObject
+  ) => TResponse extends z.ZodObject<any>
     ? Promise<NextResponse<z.infer<TResponse>>>
     : Promise<NextResponse<Record<PropertyKey, never>>>,
 ): (
@@ -445,7 +445,7 @@ export function createRoute<
   },
   handleRequest: (
     request: M10,
-  ) => TResponse extends z.AnyZodObject
+  ) => TResponse extends z.ZodObject<any>
     ? Promise<NextResponse<z.infer<TResponse>>>
     : Promise<NextResponse<Record<PropertyKey, never>>>,
 ): (
@@ -470,7 +470,7 @@ export function createRoute<
   },
   handleRequest: (
     request: any,
-  ) => TResponse extends z.AnyZodObject
+  ) => TResponse extends z.ZodObject<any>
     ? Promise<NextResponse<z.infer<TResponse>>>
     : Promise<NextResponse<Record<PropertyKey, never>>>,
 ) {
@@ -481,15 +481,15 @@ export function createRoute<
     return handleExceptions(async () => {
       const { params } = options
 
-      const data = config.body as z.AnyZodObject | undefined
+      const data = config.body as z.ZodObject<any> | undefined
       const body = (await parseBody(data, request)) as any
 
-      const requiredQueryParams = config.query as z.AnyZodObject | undefined
+      const requiredQueryParams = config.query as z.ZodObject<any> | undefined
       const queryParams = Object.fromEntries(request.nextUrl.searchParams)
       const query = (await parseQuery(requiredQueryParams, queryParams)) as any
 
       const requiredRouteParams = config.routeParams as
-        | z.AnyZodObject
+        | z.ZodObject<any>
         | undefined
       const routeParams = (await parseRouteParams(
         requiredRouteParams,
@@ -524,7 +524,7 @@ export function createRoute<
 
         const response = await handleRequest(finalRequest)
 
-        const jsonBody = config.response as z.AnyZodObject | undefined
+        const jsonBody = config.response as z.ZodObject<any> | undefined
         if (!jsonBody) {
           return response as unknown as Promise<
             NextResponse<Record<PropertyKey, never>>
@@ -568,7 +568,7 @@ export function createRoute<
   }
 }
 
-async function parseBody<TBodyParams extends z.AnyZodObject>(
+async function parseBody<TBodyParams extends z.ZodObject<any>>(
   bodyParams: TBodyParams | undefined,
   request: NextRequest,
 ) {
@@ -644,7 +644,7 @@ const createMessageFromZodIssue = (issue: z.ZodIssue) => {
   return `${issue.message} for "${issue.path.join('.')}"`
 }
 
-async function parseQuery<TQueryParams extends z.AnyZodObject>(
+async function parseQuery<TQueryParams extends z.ZodObject<any>>(
   queryParmas: TQueryParams | undefined,
   contextParams: Record<string, string> = {},
 ) {
@@ -667,7 +667,7 @@ async function parseQuery<TQueryParams extends z.AnyZodObject>(
   }
 }
 
-async function parseRouteParams<TRouteParams extends z.AnyZodObject>(
+async function parseRouteParams<TRouteParams extends z.ZodObject<any>>(
   routeParams: TRouteParams | undefined,
   contextParams: Record<string, string>,
 ) {
