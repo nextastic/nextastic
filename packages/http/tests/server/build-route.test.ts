@@ -1,47 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createRoute } from '../../src/server'
+import { NextasticRequest, buildRoute } from '../../src/server/build-route'
 import { z } from 'zod'
-
-type Middleware<TInRequest, TOutRequest> = (req: TInRequest) => TOutRequest
 
 // Type-only tests for middleware typing
 describe('TypeScript type checking', () => {
-  it('should enforce correct types', () => {
+  it('should enforce base request type without middleware', () => {
     // Without middlewares, req should have base request type
-    createRoute(
-      {
-        body: z.object({ name: z.string() }),
-      },
-      async (req) => {
-        // @ts-expect-error - user property should not exist without middleware
-        expect(req.user).toBeDefined()
+    buildRoute({
+      body: z.object({ name: z.string() }),
+    }).handle(async (req) => {
+      // @ts-expect-error - user property should not exist without middleware
+      expect(req.user).toBeDefined()
 
-        // These should work fine
-        expect(req.body.name).toBe('string')
-        expect(req.headers).toBeDefined()
+      // These should work fine
+      expect(req.body.name).toBe('string')
+      expect(req.headers).toBeDefined()
 
-        return NextResponse.json({})
-      },
-    )
+      return NextResponse.json({})
+    })
+  })
 
+  it('should transform request type with middleware', () => {
     // With middlewares, req should have transformed type
-    createRoute(
-      {
-        middlewares: [
-          (req: {
-            body: null
-            headers: any
-            cookies: any
-            nextUrl: any
-            query: null
-            routeParams: null
-          }) => ({
-            ...req,
-            user: { id: 'test' },
-          }),
-        ],
-      },
-      async (req) => {
+    buildRoute({})
+      .use((req) => ({
+        ...req,
+        user: { id: 'test' },
+      }))
+      .handle(async (req) => {
         // This should work - middleware adds user
         expect(req.user.id).toBe('string')
 
@@ -49,40 +35,34 @@ describe('TypeScript type checking', () => {
         expect(req.nonexistent).toBeDefined()
 
         return NextResponse.json({})
-      },
-    )
+      })
+  })
 
+  it('should error on middleware type mismatch', () => {
     // Middleware type mismatch should error
-    createRoute(
-      {
-        body: z.object({ name: z.string() }),
-        middlewares: [
-          // @ts-expect-error - middleware input type doesn't match base request
-          (req: { different: string }) => ({ ...req, user: { id: 'test' } }),
-        ],
-      },
-      async () => {
+    buildRoute({
+      body: z.object({ name: z.string() }),
+    })
+      // @ts-expect-error - middleware input type doesn't match base request
+      .use((req: { different: string }) => ({ ...req, user: { id: 'test' } }))
+      .handle(async () => {
         return NextResponse.json({})
-      },
-    )
+      })
   })
 })
 
 it('should handle basic GET request', async () => {
-  const route = createRoute(
-    {
-      response: z.object({
-        ok: z.boolean(),
-      }),
-    },
-    async (req) => {
-      expect(req.nextUrl.pathname).toEqual('/api/test')
+  const route = buildRoute({
+    response: z.object({
+      ok: z.boolean(),
+    }),
+  }).handle(async (req) => {
+    expect(req.nextUrl.pathname).toEqual('/api/test')
 
-      return NextResponse.json({
-        ok: true,
-      })
-    },
-  )
+    return NextResponse.json({
+      ok: true,
+    })
+  })
 
   const request = new NextRequest('http://localhost/api/test', {
     method: 'GET',
@@ -96,24 +76,21 @@ it('should handle basic GET request', async () => {
 })
 
 it('should handle POST request with JSON body', async () => {
-  const route = createRoute(
-    {
-      body: z.object({
-        name: z.string(),
-        age: z.number(),
-      }),
-      response: z.object({
-        success: z.boolean(),
-      }),
-    },
-    async (req) => {
-      expect(req.body).toEqual({
-        name: 'John',
-        age: 25,
-      })
-      return NextResponse.json({ success: true })
-    },
-  )
+  const route = buildRoute({
+    body: z.object({
+      name: z.string(),
+      age: z.number(),
+    }),
+    response: z.object({
+      success: z.boolean(),
+    }),
+  }).handle(async (req) => {
+    expect(req.body).toEqual({
+      name: 'John',
+      age: 25,
+    })
+    return NextResponse.json({ success: true })
+  })
 
   const request = new NextRequest('http://localhost/api/test', {
     method: 'POST',
@@ -128,22 +105,19 @@ it('should handle POST request with JSON body', async () => {
 })
 
 it('should handle FormData request', async () => {
-  const route = createRoute(
-    {
-      body: z.object({
-        file: z.instanceof(File),
-      }),
-      isFormData: true,
-      response: z.object({
-        received: z.boolean(),
-      }),
-    },
-    async (req) => {
-      expect(req.body instanceof FormData).toBe(true)
-      expect(req.body.get('file') instanceof File).toBe(true)
-      return NextResponse.json({ received: true })
-    },
-  )
+  const route = buildRoute({
+    body: z.object({
+      file: z.instanceof(File),
+    }),
+    isFormData: true,
+    response: z.object({
+      received: z.boolean(),
+    }),
+  }).handle(async (req) => {
+    expect(req.body instanceof FormData).toBe(true)
+    expect((req.body as FormData).get('file') instanceof File).toBe(true)
+    return NextResponse.json({ received: true })
+  })
 
   const formData = new FormData()
   const file = new File(['test'], 'test.txt', { type: 'text/plain' })
@@ -162,17 +136,14 @@ it('should handle FormData request', async () => {
 })
 
 it('should throw BadRequestException for invalid JSON body', async () => {
-  const route = createRoute(
-    {
-      body: z.object({
-        name: z.string(),
-        age: z.number(),
-      }),
-    },
-    async () => {
-      return NextResponse.json({})
-    },
-  )
+  const route = buildRoute({
+    body: z.object({
+      name: z.string(),
+      age: z.number(),
+    }),
+  }).handle(async () => {
+    return NextResponse.json({})
+  })
 
   const request = new NextRequest('http://localhost/api/test', {
     method: 'POST',
@@ -192,25 +163,22 @@ it('should throw BadRequestException for invalid JSON body', async () => {
 })
 
 it('should handle query parameters', async () => {
-  const route = createRoute(
-    {
+  const route = buildRoute({
+    query: z.object({
+      search: z.string(),
+      page: z.string().transform(Number),
+    }),
+    response: z.object({
       query: z.object({
         search: z.string(),
-        page: z.string().transform(Number),
+        page: z.number().optional(),
       }),
-      response: z.object({
-        query: z.object({
-          search: z.string(),
-          page: z.number().optional(),
-        }),
-      }),
-    },
-    async (req) => {
-      return NextResponse.json({
-        query: req.query,
-      })
-    },
-  )
+    }),
+  }).handle(async (req) => {
+    return NextResponse.json({
+      query: req.query,
+    })
+  })
 
   const request = new NextRequest(
     'http://localhost/api/test?search=test&page=1',
@@ -229,35 +197,31 @@ it('should handle query parameters', async () => {
 })
 
 it('should handle middleware chain', async () => {
-  const route = createRoute(
-    {
-      body: z.object({
-        name: z.string(),
-      }),
-      response: z.object({
-        userId: z.string(),
-      }),
-      middlewares: [
-        (req) => {
-          const foo = {
-            ...req,
-            user: {
-              id: 'user123',
-            },
-          }
-
-          return foo
+  const route = buildRoute({
+    body: z.object({
+      name: z.string(),
+    }),
+    response: z.object({
+      userId: z.string(),
+    }),
+  })
+    .use((req) => {
+      const foo = {
+        ...req,
+        user: {
+          id: 'user123',
         },
-      ],
-    },
-    async (req) => {
+      }
+
+      return foo
+    })
+    .handle(async (req) => {
       expect(req.user.id).toBe('user123')
 
       return NextResponse.json({
         userId: req.user.id,
       })
-    },
-  )
+    })
 
   const request = new NextRequest('http://localhost/api/test', {
     method: 'POST',
@@ -274,47 +238,39 @@ it('should handle middleware chain', async () => {
 })
 
 it('should handle multiple middleware chain', async () => {
-  type BaseReq = {
-    body: { name: string }
-    headers: any
-    cookies: any
-    nextUrl: any
-    query: null
-    routeParams: null
-  }
-
-  type WithUser = BaseReq & { user: { id: string } }
-  type WithRole = WithUser & { role: string }
-  type WithGreeting = WithRole & { greeting: string }
-
-  const addUser: Middleware<BaseReq, WithUser> = (req) => ({
+  const addUser = <T>(req: T) => ({
     ...req,
     user: { id: 'user456' },
   })
 
-  const addRole: Middleware<WithUser, WithRole> = (req) => ({
+  const addRole = <T>(req: T) => ({
     ...req,
     role: 'admin',
   })
 
-  const addGreeting: Middleware<WithRole, WithGreeting> = (req) => ({
+  const addGreeting = <
+    T extends NextasticRequest<z.ZodObject<{ name: z.ZodString }>>,
+  >(
+    req: T,
+  ) => ({
     ...req,
     greeting: `Hello ${req.body.name}`,
   })
 
-  const route = createRoute(
-    {
-      body: z.object({
-        name: z.string(),
-      }),
-      response: z.object({
-        message: z.string(),
-        userId: z.string(),
-        role: z.string(),
-      }),
-      middlewares: [addUser, addRole, addGreeting] as const,
-    },
-    async (req) => {
+  const route = buildRoute({
+    body: z.object({
+      name: z.string(),
+    }),
+    response: z.object({
+      message: z.string(),
+      userId: z.string(),
+      role: z.string(),
+    }),
+  })
+    .use(addUser)
+    .use(addRole)
+    .use(addGreeting)
+    .handle(async (req) => {
       expect(req.user.id).toBe('user456')
       expect(req.role).toBe('admin')
       expect(req.greeting).toBe('Hello Jane')
@@ -325,8 +281,7 @@ it('should handle multiple middleware chain', async () => {
         userId: req.user.id,
         role: req.role,
       })
-    },
-  )
+    })
 
   const request = new NextRequest('http://localhost/api/test', {
     method: 'POST',
@@ -345,33 +300,28 @@ it('should handle multiple middleware chain', async () => {
 })
 
 it('should handle inline middleware without explicit types', async () => {
-  const route = createRoute(
-    {
-      body: z.object({
-        email: z.string().email(),
-      }),
-      response: z.object({
-        welcome: z.string(),
-        userEmail: z.string(),
-        timestamp: z.number(),
-      }),
-      middlewares: [
-        // Inline middleware 1: adds current user
-        (req) => ({
-          ...req,
-          currentUser: {
-            email: req.body.email,
-            id: 'user789',
-          },
-        }),
-        // Inline middleware 2: adds timestamp
-        (req) => ({
-          ...req,
-          timestamp: Date.now(),
-        }),
-      ],
-    },
-    async (req) => {
+  const route = buildRoute({
+    body: z.object({
+      email: z.string().email(),
+    }),
+    response: z.object({
+      welcome: z.string(),
+      userEmail: z.string(),
+      timestamp: z.number(),
+    }),
+  })
+    .use((req) => ({
+      ...req,
+      currentUser: {
+        email: req.body.email,
+        id: 'user789',
+      },
+    }))
+    .use((req) => ({
+      ...req,
+      timestamp: Date.now(),
+    }))
+    .handle(async (req) => {
       // TypeScript should infer these properties from the middleware chain
       expect(req.currentUser.email).toBe('test@example.com')
       expect(req.currentUser.id).toBe('user789')
@@ -383,8 +333,7 @@ it('should handle inline middleware without explicit types', async () => {
         userEmail: req.currentUser.email,
         timestamp: req.timestamp,
       })
-    },
-  )
+    })
 
   const request = new NextRequest('http://localhost/api/test', {
     method: 'POST',
@@ -401,21 +350,18 @@ it('should handle inline middleware without explicit types', async () => {
   expect(typeof result.timestamp).toBe('number')
 })
 
-it('should handle many middlewares (up to 10)', async () => {
-  const route = createRoute(
-    {
-      body: z.object({ input: z.string() }),
-      response: z.object({ result: z.string() }),
-      middlewares: [
-        (req) => ({ ...req, step1: 'a' }),
-        (req) => ({ ...req, step2: req.step1 + 'b' }),
-        (req) => ({ ...req, step3: req.step2 + 'c' }),
-        (req) => ({ ...req, step4: req.step3 + 'd' }),
-        (req) => ({ ...req, step5: req.step4 + 'e' }),
-        (req) => ({ ...req, final: `${req.body.input}-${req.step5}` }),
-      ],
-    },
-    async (req) => {
+it('should handle many middlewares', async () => {
+  const route = buildRoute({
+    body: z.object({ input: z.string() }),
+    response: z.object({ result: z.string() }),
+  })
+    .use((req) => ({ ...req, step1: 'a' }))
+    .use((req) => ({ ...req, step2: req.step1 + 'b' }))
+    .use((req) => ({ ...req, step3: req.step2 + 'c' }))
+    .use((req) => ({ ...req, step4: req.step3 + 'd' }))
+    .use((req) => ({ ...req, step5: req.step4 + 'e' }))
+    .use((req) => ({ ...req, final: `${req.body.input}-${req.step5}` }))
+    .handle(async (req) => {
       expect(req.step1).toBe('a')
       expect(req.step2).toBe('ab')
       expect(req.step3).toBe('abc')
@@ -427,8 +373,7 @@ it('should handle many middlewares (up to 10)', async () => {
       return NextResponse.json({
         result: req.final,
       })
-    },
-  )
+    })
 
   const request = new NextRequest('http://localhost/api/test', {
     method: 'POST',
@@ -492,25 +437,24 @@ it('should handle compound middleware with single function', async () => {
     return withAudit
   }
 
-  const route = createRoute(
-    {
-      body: z.object({
-        userId: z.string(),
+  const route = buildRoute({
+    body: z.object({
+      userId: z.string(),
+      action: z.string(),
+    }),
+    response: z.object({
+      success: z.boolean(),
+      data: z.object({
+        user: z.string(),
         action: z.string(),
+        requestId: z.string(),
+        permissions: z.array(z.string()),
+        auditMessage: z.string(),
       }),
-      response: z.object({
-        success: z.boolean(),
-        data: z.object({
-          user: z.string(),
-          action: z.string(),
-          requestId: z.string(),
-          permissions: z.array(z.string()),
-          auditMessage: z.string(),
-        }),
-      }),
-      middlewares: [WithCompoundMiddleware],
-    },
-    async (req) => {
+    }),
+  })
+    .use(WithCompoundMiddleware)
+    .handle(async (req) => {
       // Verify all compound middleware properties are accessible and properly typed
       expect(req.user.id).toBe('user456')
       expect(req.user.name).toBe('User-user456')
@@ -544,8 +488,7 @@ it('should handle compound middleware with single function', async () => {
           auditMessage: req.auditTrail.metadata,
         },
       })
-    },
-  )
+    })
 
   const request = new NextRequest('http://localhost/api/test', {
     method: 'POST',
@@ -570,47 +513,41 @@ it('should handle compound middleware with single function', async () => {
 })
 
 it('should short-circuit when middleware returns NextResponse', async () => {
-  const route = createRoute(
-    {
-      body: z.object({
-        token: z.string(),
-      }),
-      response: z.object({
-        message: z.string(),
-      }),
-      middlewares: [
-        // First middleware - checks auth and potentially short-circuits
-        (req) => {
-          if (req.body.token === 'invalid') {
-            // Return early response - should short-circuit
-            return NextResponse.json(
-              { error: 'Unauthorized', code: 'AUTH_FAILED' },
-              { status: 401 },
-            )
-          }
+  const route = buildRoute({
+    body: z.object({
+      token: z.string(),
+    }),
+    response: z.object({
+      message: z.string(),
+    }),
+  })
+    .use((req) => {
+      if (req.body.token === 'invalid') {
+        // Return early response - should short-circuit
+        return NextResponse.json(
+          { error: 'Unauthorized', code: 'AUTH_FAILED' },
+          { status: 401 },
+        )
+      }
 
-          // Continue with normal flow
-          return {
-            ...req,
-            user: { id: 'user123', token: req.body.token },
-          }
-        },
-        // Second middleware - should NOT run when short-circuited
-        (req) => {
-          return {
-            ...req,
-            shouldNotReachHere: true,
-          }
-        },
-      ],
-    },
-    async (req) => {
+      // Continue with normal flow
+      return {
+        ...req,
+        user: { id: 'user123', token: req.body.token },
+      }
+    })
+    .use((req) => {
+      return {
+        ...req,
+        shouldNotReachHere: true,
+      }
+    })
+    .handle(async (req) => {
       // Handler should NOT run when short-circuited
       return NextResponse.json({
         message: `Hello user ${req.user.id}`,
       })
-    },
-  )
+    })
 
   // Test 1: Valid token - should go through all middleware and handler
   const validRequest = new NextRequest('http://localhost/api/test', {
@@ -659,66 +596,57 @@ it('should handle async middleware', async () => {
     return `${new Date().toISOString()}: ${userId} performed ${action}`
   }
 
-  const route = createRoute(
-    {
-      body: z.object({
-        userId: z.string(),
-        action: z.string(),
+  const route = buildRoute({
+    body: z.object({
+      userId: z.string(),
+      action: z.string(),
+    }),
+    response: z.object({
+      success: z.boolean(),
+      user: z.object({
+        id: z.string(),
+        name: z.string(),
+        role: z.string(),
       }),
-      response: z.object({
-        success: z.boolean(),
-        user: z.object({
-          id: z.string(),
-          name: z.string(),
-          role: z.string(),
-        }),
-        activityLog: z.string(),
-        timestamp: z.number(),
-      }),
-      middlewares: [
-        // Async auth middleware - fetches user from "database"
-        async (req) => {
-          const user = await fetchUserFromDB(req.body.userId)
+      activityLog: z.string(),
+      timestamp: z.number(),
+    }),
+  })
+    .use(async (req) => {
+      const user = await fetchUserFromDB(req.body.userId)
 
-          if (!user) {
-            return NextResponse.json(
-              { error: 'User not found' },
-              { status: 404 },
-            )
-          }
+      if (!user) {
+        return NextResponse.json({ error: 'User not found' }, { status: 404 })
+      }
 
-          return {
-            ...req,
-            user,
-          }
-        },
-        // Async logging middleware - logs the activity
-        async (req) => {
-          const activityLog = await logActivity(req.body.action, req.user.id)
+      return {
+        ...req,
+        user,
+      }
+    })
+    .use(async (req) => {
+      const activityLog = await logActivity(req.body.action, req.user.id)
 
-          return {
-            ...req,
-            activityLog,
-            timestamp: Date.now(),
-          }
-        },
-        // Async permission check middleware
-        async (req) => {
-          if (req.body.action === 'delete' && req.user.role !== 'admin') {
-            return NextResponse.json(
-              { error: 'Insufficient permissions', required: 'admin' },
-              { status: 403 },
-            )
-          }
+      return {
+        ...req,
+        activityLog,
+        timestamp: Date.now(),
+      }
+    })
+    .use(async (req) => {
+      if (req.body.action === 'delete' && req.user.role !== 'admin') {
+        return NextResponse.json(
+          { error: 'Insufficient permissions', required: 'admin' },
+          { status: 403 },
+        )
+      }
 
-          return {
-            ...req,
-            authorized: true,
-          }
-        },
-      ],
-    },
-    async (req: any) => {
+      return {
+        ...req,
+        authorized: true,
+      }
+    })
+    .handle(async (req: any) => {
       return NextResponse.json({
         success: true,
         user: {
@@ -729,8 +657,7 @@ it('should handle async middleware', async () => {
         activityLog: req.activityLog,
         timestamp: req.timestamp,
       })
-    },
-  )
+    })
 
   // Test 1: Admin user with delete action - should succeed
   const adminRequest = new NextRequest('http://localhost/api/test', {
@@ -779,55 +706,47 @@ it('should handle async middleware', async () => {
 })
 
 it('should handle mixed sync and async middleware', async () => {
-  const route = createRoute(
-    {
-      body: z.object({
-        step: z.string(),
-      }),
-      response: z.object({
-        result: z.string(),
-        steps: z.array(z.string()),
-      }),
-      middlewares: [
-        // Sync middleware
-        (req) => ({
-          ...req,
-          step1: 'sync-step-1',
-          steps: ['sync-step-1'],
-        }),
-        // Async middleware
-        async (req) => {
-          await new Promise((resolve) => setTimeout(resolve, 5))
-          return {
-            ...req,
-            step2: 'async-step-2',
-            steps: [...req.steps, 'async-step-2'],
-          }
-        },
-        // Another sync middleware
-        (req) => ({
-          ...req,
-          step3: 'sync-step-3',
-          steps: [...req.steps, 'sync-step-3'],
-        }),
-        // Another async middleware
-        async (req) => {
-          await new Promise((resolve) => setTimeout(resolve, 5))
-          return {
-            ...req,
-            step4: 'async-step-4',
-            steps: [...req.steps, 'async-step-4'],
-          }
-        },
-      ],
-    },
-    async (req: any) => {
+  const route = buildRoute({
+    body: z.object({
+      step: z.string(),
+    }),
+    response: z.object({
+      result: z.string(),
+      steps: z.array(z.string()),
+    }),
+  })
+    .use((req) => ({
+      ...req,
+      step1: 'sync-step-1',
+      steps: ['sync-step-1'],
+    }))
+    .use(async (req) => {
+      await new Promise((resolve) => setTimeout(resolve, 5))
+      return {
+        ...req,
+        step2: 'async-step-2',
+        steps: [...req.steps, 'async-step-2'],
+      }
+    })
+    .use((req) => ({
+      ...req,
+      step3: 'sync-step-3',
+      steps: [...req.steps, 'sync-step-3'],
+    }))
+    .use(async (req) => {
+      await new Promise((resolve) => setTimeout(resolve, 5))
+      return {
+        ...req,
+        step4: 'async-step-4',
+        steps: [...req.steps, 'async-step-4'],
+      }
+    })
+    .handle(async (req: any) => {
       return NextResponse.json({
         result: `Completed: ${req.steps.join(' -> ')}`,
         steps: req.steps,
       })
-    },
-  )
+    })
 
   const request = new NextRequest('http://localhost/api/test', {
     method: 'POST',

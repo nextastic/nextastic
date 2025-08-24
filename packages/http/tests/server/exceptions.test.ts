@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createRoute } from '../../src/server'
+import { buildRoute } from '../../src/server'
 import {
   HttpException,
   NotFoundException,
@@ -8,17 +8,14 @@ import {
 import { z } from 'zod'
 
 it('should handle custom HttpException', async () => {
-  const route = createRoute(
-    {
-      response: z.any(),
-    },
-    async () => {
-      throw new HttpException(422, {
-        message: 'Custom error message',
-        type: 'http_error',
-      })
-    },
-  )
+  const route = buildRoute({
+    response: z.any(),
+  }).handle(async () => {
+    throw new HttpException(422, {
+      message: 'Custom error message',
+      type: 'http_error',
+    })
+  })
 
   const request = new NextRequest('http://localhost/api/test')
   const res = await route(request, { params: Promise.resolve({}) })
@@ -32,17 +29,14 @@ it('should handle custom HttpException', async () => {
 })
 
 it('should handle NotFoundException', async () => {
-  const route = createRoute(
-    {
-      response: z.any(),
-    },
-    async () => {
-      throw new NotFoundException({
-        message: 'Resource not found',
-        type: 'not_found',
-      })
-    },
-  )
+  const route = buildRoute({
+    response: z.any(),
+  }).handle(async () => {
+    throw new NotFoundException({
+      message: 'Resource not found',
+      type: 'not_found',
+    })
+  })
 
   const request = new NextRequest('http://localhost/api/test')
   const res = await route(request, { params: Promise.resolve({}) })
@@ -55,14 +49,11 @@ it('should handle NotFoundException', async () => {
 })
 
 it('should handle UnauthorizedException', async () => {
-  const route = createRoute(
-    {
-      response: z.any(),
-    },
-    async () => {
-      throw new UnauthorizedException()
-    },
-  )
+  const route = buildRoute({
+    response: z.any(),
+  }).handle(async () => {
+    throw new UnauthorizedException()
+  })
 
   const request = new NextRequest('http://localhost/api/test')
   const res = await route(request, { params: Promise.resolve({}) })
@@ -75,14 +66,11 @@ it('should handle UnauthorizedException', async () => {
 })
 
 it('should handle unexpected errors', async () => {
-  const route = createRoute(
-    {
-      response: z.any(),
-    },
-    async () => {
-      throw new Error('Unexpected error')
-    },
-  )
+  const route = buildRoute({
+    response: z.any(),
+  }).handle(async () => {
+    throw new Error('Unexpected error')
+  })
 
   const request = new NextRequest('http://localhost/api/test')
   const res = await route(request, { params: Promise.resolve({}) })
@@ -95,17 +83,14 @@ it('should handle unexpected errors', async () => {
 })
 
 it('should handle zod validation errors', async () => {
-  const route = createRoute(
-    {
-      body: z.object({
-        name: z.string(),
-      }),
-      response: z.any(),
-    },
-    async (req) => {
-      return NextResponse.json({})
-    },
-  )
+  const route = buildRoute({
+    body: z.object({
+      name: z.string(),
+    }),
+    response: z.any(),
+  }).handle(async (req) => {
+    return NextResponse.json({})
+  })
 
   const request = new NextRequest('http://localhost/api/test', {
     method: 'POST',
