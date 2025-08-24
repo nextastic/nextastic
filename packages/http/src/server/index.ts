@@ -1,3 +1,3 @@
-export * from './create-route'
+export * from './build-route'
 export * from './exception-handler'
 export * from './exceptions'
