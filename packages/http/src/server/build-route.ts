@@ -55,11 +55,11 @@ export const buildRoute = <
   )
 }
 
-type Middleware<TInput, TOutput> = (
+export type Middleware<TInput, TOutput> = (
   input: TInput,
 ) => TOutput | NextResponse | Promise<TOutput | NextResponse>
 
-class RouteBuilder<
+export class RouteBuilder<
   TRequest extends NextasticRequest<any, any, any, any>,
   TResponse,
 > {
