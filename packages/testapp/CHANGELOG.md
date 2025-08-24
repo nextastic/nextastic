@@ -1,5 +1,12 @@
 # testapp
 
+## 3.0.8
+
+### Patch Changes
+
+- Updated dependencies [a6eaeec]
+  - @nextastic/http@6.0.0
+
 ## 3.0.7
 
 ### Patch Changes

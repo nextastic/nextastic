@@ -1,5 +1,11 @@
 # @nextastic/http
 
+## 6.0.0
+
+### Major Changes
+
+- a6eaeec: Migrate from createRoute to buildRoute builder
+
 ## 5.1.3
 
 ### Patch Changes
