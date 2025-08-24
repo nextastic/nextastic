@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { BaseRequest, buildRoute } from '../../src/server/build-route'
+import { NextasticRequest, buildRoute } from '../../src/server/build-route'
 import { z } from 'zod'
 
 // Type-only tests for middleware typing
 describe('TypeScript type checking', () => {
-  it('should enforce correct types', () => {
+  it('should enforce base request type without middleware', () => {
     // Without middlewares, req should have base request type
     buildRoute({
       body: z.object({ name: z.string() }),
@@ -18,7 +18,9 @@ describe('TypeScript type checking', () => {
 
       return NextResponse.json({})
     })
+  })
 
+  it('should transform request type with middleware', () => {
     // With middlewares, req should have transformed type
     buildRoute({})
       .use((req) => ({
@@ -34,7 +36,9 @@ describe('TypeScript type checking', () => {
 
         return NextResponse.json({})
       })
+  })
 
+  it('should error on middleware type mismatch', () => {
     // Middleware type mismatch should error
     buildRoute({
       body: z.object({ name: z.string() }),
@@ -245,7 +249,7 @@ it('should handle multiple middleware chain', async () => {
   })
 
   const addGreeting = <
-    T extends BaseRequest<z.ZodObject<{ name: z.ZodString }>>,
+    T extends NextasticRequest<z.ZodObject<{ name: z.ZodString }>>,
   >(
     req: T,
   ) => ({

@@ -8,10 +8,10 @@ import { handleExceptions } from './exception-handler'
 import { NextRequest, NextResponse } from 'next/server'
 import { ZodError, z } from 'zod'
 
-export type BaseRequest<
-  TBody,
-  TExpectsFormData = unknown,
+export type NextasticRequest<
+  TBody = unknown,
   TQuery = unknown,
+  TExpectsFormData = unknown,
   TRouteParams = unknown,
 > = {
   body: TBody extends z.ZodObject<any>
@@ -28,93 +28,80 @@ export type BaseRequest<
     : null
 }
 
-type Config<TBody, TExpectsFormData, TQuery, TRouteParams, TResponse> = {
+export const buildRoute = <
+  TBody,
+  TQuery,
+  TResponse,
+  TExpectsFormData,
+  TRouteParams,
+>(config: {
   body?: TBody
   isFormData?: TExpectsFormData
   query?: TQuery
-  response?: TResponse
   routeParams?: TRouteParams
+  response?: TResponse
+}) => {
+  return new RouteBuilder<
+    NextasticRequest<TBody, TQuery, TExpectsFormData, TRouteParams>,
+    TResponse
+  >(
+    {
+      body: config.body,
+      isFormData: config.isFormData,
+      query: config.query,
+      routeParams: config.routeParams,
+    },
+    config.response,
+  )
 }
 
-export type MiddlewareFn<TInput, TOutput> = (
-  req: TInput,
+type Middleware<TInput, TOutput> = (
+  input: TInput,
 ) => TOutput | NextResponse | Promise<TOutput | NextResponse>
 
-type HandlerFn<TInput, TResponse> = (
-  req: TInput,
-) => TResponse extends z.ZodObject<any>
-  ? Promise<NextResponse<z.infer<TResponse>>>
-  : Promise<NextResponse<Record<PropertyKey, never>>>
-
 class RouteBuilder<
-  TBody,
-  TExpectsFormData,
-  TQuery,
-  TRouteParams,
+  TRequest extends NextasticRequest<any, any, any, any>,
   TResponse,
-  TCurrentRequest = BaseRequest<TBody, TExpectsFormData, TQuery, TRouteParams>,
 > {
   constructor(
-    private config: Config<
-      TBody,
-      TExpectsFormData,
-      TQuery,
-      TRouteParams,
-      TResponse
-    >,
-    private middleware?: MiddlewareFn<any, TCurrentRequest>,
+    private config: {
+      body?: any
+      isFormData?: any
+      query?: any
+      routeParams?: any
+    },
+    private response: TResponse | undefined,
+    private middlewares: Middleware<any, any>[] = [],
   ) {}
 
-  use<TNextRequest>(
-    middleware: MiddlewareFn<TCurrentRequest, TNextRequest>,
-  ): RouteBuilder<
-    TBody,
-    TExpectsFormData,
-    TQuery,
-    TRouteParams,
-    TResponse,
-    TNextRequest
-  > {
-    return new RouteBuilder<
-      TBody,
-      TExpectsFormData,
-      TQuery,
-      TRouteParams,
-      TResponse,
-      TNextRequest
-    >(this.config, async (baseRequest: any) => {
-      const currentRequest = this.middleware
-        ? await this.middleware(baseRequest)
-        : baseRequest
-
-      if (currentRequest instanceof NextResponse) {
-        return currentRequest
-      }
-
-      return await middleware(currentRequest)
-    })
+  use<NewTRequest extends NextasticRequest<any, any, any, any>>(
+    middleware: Middleware<TRequest, NewTRequest>,
+  ): RouteBuilder<NewTRequest, TResponse> {
+    this.middlewares.push(middleware)
+    return this as any
   }
 
   handle(
-    handler: HandlerFn<TCurrentRequest, TResponse>,
+    handler: (
+      req: TRequest,
+    ) => TResponse extends z.ZodObject<any>
+      ? Promise<NextResponse<z.infer<TResponse>>>
+      : Promise<NextResponse<Record<PropertyKey, never>>>,
   ): (
     request: NextRequest,
     options: { params: Promise<Record<string, string>> },
   ) => Promise<NextResponse> {
-    return async (
-      request: NextRequest,
-      options: { params: Promise<Record<string, string>> },
-    ) => {
+    return async (req, options) => {
       return handleExceptions(async () => {
-        const { params } = options
+        const params = await options.params
 
         const data = this.config.body as z.ZodObject<any> | undefined
-        const body = (await parseBody(data, request)) as any
+        const body = (await parseBody(data, req)) as any
 
         const requiredQueryParams = this.config.query as
           | z.ZodObject<any>
           | undefined
-        const queryParams = Object.fromEntries(request.nextUrl.searchParams)
+        const queryParams = Object.fromEntries(req.nextUrl.searchParams)
         const query = (await parseQuery(
           requiredQueryParams,
           queryParams,
@@ -125,34 +112,31 @@ class RouteBuilder<
           | undefined
         const routeParams = (await parseRouteParams(
           requiredRouteParams,
-          await params,
+          params,
         )) as any
 
         try {
-          const baseRequest = {
+          let nextRequest = {
             body,
-            cookies: request.cookies,
-            nextUrl: request.nextUrl,
+            cookies: req.cookies,
+            nextUrl: req.nextUrl,
             query,
             routeParams,
-            headers: request.headers,
+            headers: req.headers,
           }
+          for (const middleware of this.middlewares) {
+            const middlewareResult = await middleware(nextRequest)
 
-          let finalRequest = baseRequest as any
-
-          if (this.middleware) {
-            const result = await this.middleware(finalRequest)
-
-            if (result instanceof NextResponse) {
-              return result
+            if (middlewareResult instanceof NextResponse) {
+              return middlewareResult
             }
 
-            finalRequest = result
+            nextRequest = middlewareResult
           }
 
-          const response = await handler(finalRequest)
+          const response = await handler(nextRequest as any)
 
-          const jsonBody = this.config.response as z.ZodObject<any> | undefined
+          const jsonBody = this.response as z.ZodObject<any> | undefined
           if (!jsonBody) {
             return response as unknown as Promise<
               NextResponse<Record<PropertyKey, never>>
@@ -160,7 +144,7 @@ class RouteBuilder<
           }
 
           try {
-            jsonBody.parse(await response.clone().json())
+            jsonBody.parse(await response.clone().json()) // Clone to avoid already read response error
             return response as unknown as NextResponse<TResponse>
           } catch (error: unknown) {
             if (error instanceof ZodError) {
@@ -173,7 +157,7 @@ class RouteBuilder<
 
             return response
           }
-        } catch (error) {
+        } catch (error: unknown) {
           if (error instanceof HttpException) {
             return NextResponse.json(error.metadata, { status: error.status })
           }
@@ -195,18 +179,6 @@ class RouteBuilder<
       })
     }
   }
-}
-
-export function buildRoute<
-  TBody = undefined,
-  TExpectsFormData = false,
-  TQuery = undefined,
-  TRouteParams = undefined,
-  TResponse = undefined,
->(
-  config: Config<TBody, TExpectsFormData, TQuery, TRouteParams, TResponse>,
-): RouteBuilder<TBody, TExpectsFormData, TQuery, TRouteParams, TResponse> {
-  return new RouteBuilder(config)
 }
 
 async function parseBody<TBodyParams extends z.ZodObject<any>>(
@@ -330,3 +302,11 @@ async function parseRouteParams<TRouteParams extends z.ZodObject<any>>(
     throw error
   }
 }
+
+const f = buildRoute({
+  body: z.object({ name: z.string() }),
+})
+
+f.use((req) => ({ ...req, name: 'John' })).use((req) => ({
+  ...req,
+}))
