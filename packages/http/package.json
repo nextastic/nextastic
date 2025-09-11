@@ -1,6 +1,6 @@
 {
   "name": "@nextastic/http",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "description": "Strongly typed http helpers for client, and server.",
   "repository": {
     "type": "git",
@@ -28,7 +28,7 @@
   },
   "peerDependencies": {
     "next": ">=14",
-    "zod": "^4.1"
+    "zod": "^3.23.8"
   },
   "dependencies": {
     "@nextastic/config": "workspace:*"

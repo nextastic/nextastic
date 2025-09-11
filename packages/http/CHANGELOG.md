@@ -1,5 +1,11 @@
 # @nextastic/http
 
+## 6.1.0
+
+### Minor Changes
+
+- Downgrade zod to 3.28
+
 ## 6.0.0
 
 ### Major Changes
