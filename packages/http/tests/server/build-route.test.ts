@@ -162,6 +162,32 @@ it('should throw BadRequestException for invalid JSON body', async () => {
   expect(res.status).toBe(400)
 })
 
+it('should throw BadRequestException for empty body', async () => {
+  const route = buildRoute({
+    body: z.object({
+      name: z.string(),
+      age: z.number(),
+    }),
+  }).handle(async () => {
+    return NextResponse.json({})
+  })
+
+  const request = new NextRequest('http://localhost/api/test', {
+    method: 'POST',
+    body: '', // empty body
+  })
+
+  const res = await route(request, {
+    params: Promise.resolve({}),
+  })
+
+  expect(await res.json()).toEqual({
+    type: 'invalid_data',
+    message: 'Body must not be empty',
+  })
+  expect(res.status).toBe(400)
+})
+
 it('should handle query parameters', async () => {
   const route = buildRoute({
     query: z.object({

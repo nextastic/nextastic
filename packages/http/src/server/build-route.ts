@@ -93,29 +93,29 @@ export class RouteBuilder<
   ) => Promise<NextResponse> {
     return async (req, options) => {
       return handleExceptions(async () => {
-        const params = await options.params
-
-        const data = this.config.body as z.ZodObject<any> | undefined
-        const body = (await parseBody(data, req)) as any
-
-        const requiredQueryParams = this.config.query as
-          | z.ZodObject<any>
-          | undefined
-        const queryParams = Object.fromEntries(req.nextUrl.searchParams)
-        const query = (await parseQuery(
-          requiredQueryParams,
-          queryParams,
-        )) as any
-
-        const requiredRouteParams = this.config.routeParams as
-          | z.ZodObject<any>
-          | undefined
-        const routeParams = (await parseRouteParams(
-          requiredRouteParams,
-          params,
-        )) as any
-
         try {
+          const params = await options.params
+
+          const data = this.config.body as z.ZodObject<any> | undefined
+          const body = (await parseBody(data, req)) as any
+
+          const requiredQueryParams = this.config.query as
+            | z.ZodObject<any>
+            | undefined
+          const queryParams = Object.fromEntries(req.nextUrl.searchParams)
+          const query = (await parseQuery(
+            requiredQueryParams,
+            queryParams,
+          )) as any
+
+          const requiredRouteParams = this.config.routeParams as
+            | z.ZodObject<any>
+            | undefined
+          const routeParams = (await parseRouteParams(
+            requiredRouteParams,
+            params,
+          )) as any
+
           let nextRequest = {
             body,
             cookies: req.cookies,
@@ -189,31 +189,34 @@ async function parseBody<TBodyParams extends z.ZodObject<any>>(
     return null
   }
 
-  const { data, formData } = await getData(request)
-
   try {
-    if (formData) {
-      bodyParams.parse(data)
-      return formData
-    }
+    const { data, formData } = await getData(request)
 
-    return bodyParams.parse(data)
+    try {
+      if (formData) {
+        bodyParams.parse(data)
+        return formData
+      }
+
+      return bodyParams.parse(data)
+    } catch (error: unknown) {
+      if (error instanceof ZodError) {
+        throw new BadRequestException({
+          type: 'invalid_data',
+          message: createZodErrorMessage(error),
+          errors: error.format(),
+        })
+      }
+
+      throw error
+    }
   } catch (error: unknown) {
-    if (error instanceof ZodError) {
+    // Check by constructor name and message since instanceof doesn't work reliably
+    // with errors from different JavaScript contexts (like undici)
+    if (error?.constructor?.name === 'SyntaxError' && (error as any)?.message === 'Unexpected end of JSON input') {
       throw new BadRequestException({
         type: 'invalid_data',
-        message: createZodErrorMessage(error),
-        errors: error.format(),
-      })
-    }
-
-    if (
-      error instanceof SyntaxError &&
-      error.message === 'Unexpected end of JSON input'
-    ) {
-      throw new BadRequestException({
-        type: 'invalid_data',
-        message: 'Invalid JSON',
+        message: 'Body must not be empty',
       })
     }
 

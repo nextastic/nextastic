@@ -1,5 +1,11 @@
 # @nextastic/http
 
+## 6.2.0
+
+### Minor Changes
+
+- handle empty json body
+
 ## 6.1.0
 
 ### Minor Changes
