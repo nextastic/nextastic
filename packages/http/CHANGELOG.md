@@ -1,5 +1,11 @@
 # @nextastic/http
 
+## 6.2.1
+
+### Patch Changes
+
+- fix ZodError instance check failing
+
 ## 6.2.0
 
 ### Minor Changes

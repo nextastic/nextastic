@@ -147,11 +147,12 @@ export class RouteBuilder<
             jsonBody.parse(await response.clone().json()) // Clone to avoid already read response error
             return response as unknown as NextResponse<TResponse>
           } catch (error: unknown) {
-            if (error instanceof ZodError) {
+            // Check for ZodError by name and structure since instanceof may fail with different zod versions
+            if (error instanceof ZodError || (error?.constructor?.name === 'ZodError' && error && typeof error === 'object' && 'issues' in error)) {
               throw new InternalServerErrorException({
                 type: 'unknown_response',
-                message: createZodErrorMessage(error),
-                errors: error.format(),
+                message: createZodErrorMessage(error as ZodError),
+                errors: (error as ZodError).format(),
               })
             }
 
@@ -200,11 +201,12 @@ async function parseBody<TBodyParams extends z.ZodObject<any>>(
 
       return bodyParams.parse(data)
     } catch (error: unknown) {
-      if (error instanceof ZodError) {
+      // Check for ZodError by name and structure since instanceof may fail with different zod versions
+      if (error instanceof ZodError || (error?.constructor?.name === 'ZodError' && error && typeof error === 'object' && 'issues' in error)) {
         throw new BadRequestException({
           type: 'invalid_data',
-          message: createZodErrorMessage(error),
-          errors: error.format(),
+          message: createZodErrorMessage(error as ZodError),
+          errors: (error as ZodError).format(),
         })
       }
 
@@ -213,10 +215,20 @@ async function parseBody<TBodyParams extends z.ZodObject<any>>(
   } catch (error: unknown) {
     // Check by constructor name and message since instanceof doesn't work reliably
     // with errors from different JavaScript contexts (like undici)
-    if (error?.constructor?.name === 'SyntaxError' && (error as any)?.message === 'Unexpected end of JSON input') {
+    if (error?.constructor?.name === 'SyntaxError') {
+      const errorMessage = (error as any)?.message || ''
+      
+      if (errorMessage === 'Unexpected end of JSON input') {
+        throw new BadRequestException({
+          type: 'invalid_data',
+          message: 'Body must not be empty',
+        })
+      }
+      
+      // Handle other JSON parsing errors
       throw new BadRequestException({
         type: 'invalid_data',
-        message: 'Body must not be empty',
+        message: 'Invalid JSON',
       })
     }
 
@@ -271,11 +283,12 @@ async function parseQuery<TQueryParams extends z.ZodObject<any>>(
   try {
     return queryParmas.parse(contextParams)
   } catch (error: unknown) {
-    if (error instanceof ZodError) {
+    // Check for ZodError by name and structure since instanceof may fail with different zod versions
+    if (error instanceof ZodError || (error?.constructor?.name === 'ZodError' && error && typeof error === 'object' && 'issues' in error)) {
       throw new NotFoundException({
         type: 'missing_query_param',
-        message: createZodErrorMessage(error),
-        errors: error.format(),
+        message: createZodErrorMessage(error as ZodError),
+        errors: (error as ZodError).format(),
       })
     }
 
@@ -294,11 +307,12 @@ async function parseRouteParams<TRouteParams extends z.ZodObject<any>>(
   try {
     return routeParams.parse(contextParams)
   } catch (error: unknown) {
-    if (error instanceof ZodError) {
+    // Check for ZodError by name and structure since instanceof may fail with different zod versions
+    if (error instanceof ZodError || (error?.constructor?.name === 'ZodError' && error && typeof error === 'object' && 'issues' in error)) {
       throw new NotFoundException({
         type: 'missing_route_param',
-        message: createZodErrorMessage(error),
-        errors: error.format(),
+        message: createZodErrorMessage(error as ZodError),
+        errors: (error as ZodError).format(),
       })
     }
 
