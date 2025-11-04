@@ -1,5 +1,16 @@
 # @nextastic/eslint
 
+## 6.0.0
+
+### Major Changes
+
+- Update for next.js 16 flat eslint config
+
+### Patch Changes
+
+- Updated dependencies
+  - @nextastic/eslint-config@6.0.0
+
 ## 5.0.0
 
 ### Major Changes

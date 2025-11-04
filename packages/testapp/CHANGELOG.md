@@ -1,5 +1,12 @@
 # testapp
 
+## 3.0.12
+
+### Patch Changes
+
+- Updated dependencies
+  - @nextastic/eslint-config@6.0.0
+
 ## 3.0.11
 
 ### Patch Changes
