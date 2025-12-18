@@ -115,7 +115,7 @@ it('should handle FormData request', async () => {
     }),
   }).handle(async (req) => {
     expect(req.body instanceof FormData).toBe(true)
-    expect((req.body as FormData).get('file') instanceof File).toBe(true)
+    expect(req.body.get('file') instanceof File).toBe(true)
     return NextResponse.json({ received: true })
   })
 

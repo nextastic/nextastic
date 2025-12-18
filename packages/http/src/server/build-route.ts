@@ -11,12 +11,14 @@ import { ZodError, z } from 'zod'
 export type NextasticRequest<
   TBody = unknown,
   TQuery = unknown,
-  TExpectsFormData = unknown,
+  TExpectsFormData extends boolean | undefined = undefined,
   TRouteParams = unknown,
 > = {
   body: TBody extends z.ZodObject<any>
-    ? TExpectsFormData extends true
-      ? FormData
+    ? true extends TExpectsFormData
+      ? false extends TExpectsFormData
+        ? z.infer<TBody>
+        : FormData
       : z.infer<TBody>
     : null
   headers: NextRequest['headers']
@@ -32,8 +34,8 @@ export const buildRoute = <
   TBody,
   TQuery,
   TResponse,
-  TExpectsFormData,
   TRouteParams,
+  TExpectsFormData extends boolean | undefined = undefined,
 >(config: {
   body?: TBody
   isFormData?: TExpectsFormData

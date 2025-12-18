@@ -1,5 +1,11 @@
 # @nextastic/http
 
+## 6.2.2
+
+### Patch Changes
+
+- Fix isFormData returning wrong type
+
 ## 6.2.1
 
 ### Patch Changes
