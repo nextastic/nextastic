@@ -1,5 +1,11 @@
 # @nextastic/queue
 
+## 2.3.3
+
+### Patch Changes
+
+- b12bf5b: fix: build failing due to ioredis version conflict with bullmq
+
 ## 2.3.2
 
 ### Patch Changes
