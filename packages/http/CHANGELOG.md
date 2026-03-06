@@ -1,5 +1,11 @@
 # @nextastic/http
 
+## 6.2.3
+
+### Patch Changes
+
+- Fix missing errors
+
 ## 6.2.2
 
 ### Patch Changes
