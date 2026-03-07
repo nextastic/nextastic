@@ -4,7 +4,9 @@
 
 ### Patch Changes
 
+- Updated dependencies
 - Updated dependencies [b12bf5b]
+  - @nextastic/http@6.2.4
   - @nextastic/queue@2.3.3
 
 ## 3.0.14

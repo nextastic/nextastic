@@ -95,12 +95,15 @@ export class RouteBuilder<
   ) => Promise<NextResponse> {
     return async (req, options) => {
       return handleExceptions(async () => {
+        let route_step: 'parse_params' | 'parse_body' | 'parse_query' | 'middleware' | 'handler' | 'validate_response' = 'parse_params'
         try {
           const params = await options.params
 
+          route_step = 'parse_body'
           const data = this.config.body as z.ZodObject<any> | undefined
           const body = (await parseBody(data, req)) as any
 
+          route_step = 'parse_query'
           const requiredQueryParams = this.config.query as
             | z.ZodObject<any>
             | undefined
@@ -126,6 +129,8 @@ export class RouteBuilder<
             routeParams,
             headers: req.headers,
           }
+
+          route_step = 'middleware'
           for (const middleware of this.middlewares) {
             const middlewareResult = await middleware(nextRequest)
 
@@ -136,8 +141,10 @@ export class RouteBuilder<
             nextRequest = middlewareResult
           }
 
+          route_step = 'handler'
           const response = await handler(nextRequest as any)
 
+          route_step = 'validate_response'
           const jsonBody = this.response as z.ZodObject<any> | undefined
           if (!jsonBody) {
             return response as unknown as Promise<
@@ -185,8 +192,10 @@ export class RouteBuilder<
           }
 
           if (error instanceof Error) {
-            console.error(`Unknown server error`, {
+            console.error(`Unknown server error: ${error.message}`, {
               ...baseErrorContext,
+              route_step,
+              error_name: error.name,
               stack_trace: error.stack?.split('\n'),
               data: 'data' in error ? error.data : null,
             })
@@ -195,8 +204,6 @@ export class RouteBuilder<
               {
                 type: 'server_error',
                 message: 'Unknown server error',
-                stack_trace: error.stack?.split('\n'),
-                data: 'data' in error ? error.data : null,
               },
               { status: 500 },
             )

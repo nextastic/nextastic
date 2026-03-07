@@ -1,5 +1,11 @@
 # @nextastic/http
 
+## 6.2.4
+
+### Patch Changes
+
+- Improve erorr console logging context with route setep
+
 ## 6.2.3
 
 ### Patch Changes
