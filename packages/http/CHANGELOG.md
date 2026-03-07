@@ -1,5 +1,11 @@
 # @nextastic/http
 
+## 7.0.0
+
+### Major Changes
+
+- Update to zod 4
+
 ## 6.2.4
 
 ### Patch Changes

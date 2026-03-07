@@ -32,8 +32,8 @@ describe('Zod validation error status codes', () => {
     // Check response body
     const responseBody = await response.json()
     expect(responseBody.type).toBe('invalid_data')
-    expect(responseBody.message).toContain('String must contain at least 3 character(s)')
-    expect(responseBody.message).toContain('Number must be greater than 0')
+    expect(responseBody.message).toContain('Too small: expected string to have >=3 characters')
+    expect(responseBody.message).toContain('Too small: expected number to be >0')
     expect(responseBody.errors).toBeDefined()
   })
 

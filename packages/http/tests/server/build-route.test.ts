@@ -156,7 +156,7 @@ it('should throw BadRequestException for invalid JSON body', async () => {
 
   expect(await res.json()).toEqual({
     type: 'invalid_data',
-    message: 'age is required',
+    message: 'Invalid input: expected number, received undefined for "age"',
     errors: expect.any(Object),
   })
   expect(res.status).toBe(400)
