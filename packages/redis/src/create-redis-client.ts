@@ -7,7 +7,9 @@ export const createRedisClient = async () => {
     return client
   }
 
-  client = new Redis(process.env.REDIS_HOST!)
+  client = new Redis(process.env.REDIS_HOST!, {
+    keyPrefix: process.env.REDIS_KEY_PREFIX ?? '',
+  })
 
   return client
 }

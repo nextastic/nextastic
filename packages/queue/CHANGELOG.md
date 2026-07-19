@@ -1,5 +1,19 @@
 # @nextastic/queue
 
+## 2.4.0
+
+### Minor Changes
+
+- Add per-app redis key prefix to share single redis between apps
+
+### Patch Changes
+
+- Updated dependencies
+  - @nextastic/config@2.2.0
+  - @nextastic/redis@0.1.0
+  - @nextastic/logger@3.0.2
+  - @nextastic/cache@0.2.1
+
 ## 2.3.3
 
 ### Patch Changes

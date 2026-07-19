@@ -14,6 +14,7 @@ export const getQueue = (name: string) => {
 
   const queue = new Queue(name, {
     connection,
+    prefix: config.queue.prefix,
     defaultJobOptions: {
       attempts: 3,
       backoff: {

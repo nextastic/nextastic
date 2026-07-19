@@ -79,6 +79,7 @@ export async function work(params: WorkParams) {
       },
       {
         connection,
+        prefix: config.queue.prefix,
         concurrency: queue.concurrency,
         removeOnComplete: {
           count: config.queue.maxCompletedJobs,

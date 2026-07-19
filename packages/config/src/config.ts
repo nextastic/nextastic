@@ -78,6 +78,14 @@ export const config = {
      * @default 'default'
      */
     defaultQueueName: process.env.QUEUE_DEFAULT_QUEUE_NAME ?? 'default',
+
+    /**
+     * BullMQ key prefix. Set a distinct value per app (e.g. 'myapp')
+     * when multiple apps share one Redis, so their queues can't collide.
+     * @env QUEUE_PREFIX
+     * @default 'bull'
+     */
+    prefix: process.env.QUEUE_PREFIX ?? 'bull',
   },
   redis: {
     /**
@@ -86,5 +94,15 @@ export const config = {
      * @default '127.0.0.1'
      */
     host: process.env.REDIS_HOST ?? '127.0.0.1',
+
+    /**
+     * Key prefix applied to all non-queue Redis keys (cache, rate limits).
+     * Set a distinct value per app (e.g. 'myapp:') when multiple apps
+     * share one Redis. Not applied to BullMQ connections, which use
+     * queue.prefix instead.
+     * @env REDIS_KEY_PREFIX
+     * @default ''
+     */
+    keyPrefix: process.env.REDIS_KEY_PREFIX ?? '',
   },
 }

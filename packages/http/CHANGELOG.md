@@ -1,5 +1,12 @@
 # @nextastic/http
 
+## 7.0.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @nextastic/config@2.2.0
+
 ## 7.0.0
 
 ### Major Changes

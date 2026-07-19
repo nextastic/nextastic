@@ -1,5 +1,11 @@
 # @nextastic/redis
 
+## 0.1.0
+
+### Minor Changes
+
+- Add per-app redis key prefix to share single redis between apps
+
 ## 0.0.3
 
 ### Patch Changes

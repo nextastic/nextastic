@@ -1,5 +1,14 @@
 # testapp
 
+## 3.0.17
+
+### Patch Changes
+
+- Updated dependencies
+  - @nextastic/queue@2.4.0
+  - @nextastic/db@5.0.3
+  - @nextastic/http@7.0.1
+
 ## 3.0.16
 
 ### Patch Changes

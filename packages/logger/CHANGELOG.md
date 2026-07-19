@@ -1,5 +1,12 @@
 # @nextastic/logger
 
+## 3.0.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @nextastic/config@2.2.0
+
 ## 3.0.1
 
 ### Patch Changes

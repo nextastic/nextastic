@@ -1,5 +1,12 @@
 # @nextastic/db
 
+## 5.0.3
+
+### Patch Changes
+
+- Updated dependencies
+  - @nextastic/config@2.2.0
+
 ## 5.0.2
 
 ### Patch Changes

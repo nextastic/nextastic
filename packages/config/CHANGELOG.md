@@ -1,5 +1,11 @@
 # @nextastic/config
 
+## 2.2.0
+
+### Minor Changes
+
+- Add per-app redis key prefix to share single redis between apps
+
 ## 2.1.0
 
 ### Minor Changes
