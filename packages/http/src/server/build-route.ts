@@ -30,6 +30,24 @@ export type NextasticRequest<
     : null
 }
 
+type UnknownRouteErrorContext = {
+  method: string
+  url: string
+  query: Record<string, string>
+  route_params: Record<string, string>
+  route_step: string
+}
+
+let unknownRouteErrorHandler:
+  | ((error: unknown, context: UnknownRouteErrorContext) => void)
+  | null = null
+
+export const handleUnknownRouteError = (
+  handler: (error: unknown, context: UnknownRouteErrorContext) => void,
+) => {
+  unknownRouteErrorHandler = handler
+}
+
 export const buildRoute = <
   TBody,
   TQuery,
@@ -95,15 +113,21 @@ export class RouteBuilder<
   ) => Promise<NextResponse> {
     return async (req, options) => {
       return handleExceptions(async () => {
-        let route_step: 'parse_params' | 'parse_body' | 'parse_query' | 'middleware' | 'handler' | 'validate_response' = 'parse_params'
+        let routeStep:
+          | 'parse_params'
+          | 'parse_body'
+          | 'parse_query'
+          | 'middleware'
+          | 'handler'
+          | 'validate_response' = 'parse_params'
         try {
           const params = await options.params
 
-          route_step = 'parse_body'
+          routeStep = 'parse_body'
           const data = this.config.body as z.ZodObject<any> | undefined
           const body = (await parseBody(data, req)) as any
 
-          route_step = 'parse_query'
+          routeStep = 'parse_query'
           const requiredQueryParams = this.config.query as
             | z.ZodObject<any>
             | undefined
@@ -130,7 +154,7 @@ export class RouteBuilder<
             headers: req.headers,
           }
 
-          route_step = 'middleware'
+          routeStep = 'middleware'
           for (const middleware of this.middlewares) {
             const middlewareResult = await middleware(nextRequest)
 
@@ -141,10 +165,10 @@ export class RouteBuilder<
             nextRequest = middlewareResult
           }
 
-          route_step = 'handler'
+          routeStep = 'handler'
           const response = await handler(nextRequest as any)
 
-          route_step = 'validate_response'
+          routeStep = 'validate_response'
           const jsonBody = this.response as z.ZodObject<any> | undefined
           if (!jsonBody) {
             return response as unknown as Promise<
@@ -153,21 +177,14 @@ export class RouteBuilder<
           }
 
           try {
-            jsonBody.parse(await response.clone().json()) // Clone to avoid already read response error
+            jsonBody.parse(await response.clone().json())
             return response as unknown as NextResponse<TResponse>
           } catch (error: unknown) {
-            // Check for ZodError by name and structure since instanceof may fail with different zod versions
-            if (
-              error instanceof ZodError ||
-              (error?.constructor?.name === 'ZodError' &&
-                error &&
-                typeof error === 'object' &&
-                'issues' in error)
-            ) {
+            if (isZodError(error)) {
               throw new InternalServerErrorException({
                 type: 'unknown_response',
-                message: createZodErrorMessage(error as ZodError),
-                errors: (error as ZodError).format(),
+                message: createZodErrorMessage(error),
+                errors: error.format(),
               })
             }
 
@@ -194,10 +211,14 @@ export class RouteBuilder<
           if (error instanceof Error) {
             console.error(`Unknown server error: ${error.message}`, {
               ...baseErrorContext,
-              route_step,
+              route_step: routeStep,
               error_name: error.name,
               stack_trace: error.stack?.split('\n'),
               data: 'data' in error ? error.data : null,
+            })
+            unknownRouteErrorHandler?.(error, {
+              ...baseErrorContext,
+              route_step: routeStep,
             })
 
             return NextResponse.json(
@@ -236,26 +257,18 @@ async function parseBody<TBodyParams extends z.ZodObject<any>>(
 
       return bodyParams.parse(data)
     } catch (error: unknown) {
-      // Check for ZodError by name and structure since instanceof may fail with different zod versions
-      if (
-        error instanceof ZodError ||
-        (error?.constructor?.name === 'ZodError' &&
-          error &&
-          typeof error === 'object' &&
-          'issues' in error)
-      ) {
+      if (isZodError(error)) {
         throw new BadRequestException({
           type: 'invalid_data',
-          message: createZodErrorMessage(error as ZodError),
-          errors: (error as ZodError).format(),
+          message: createZodErrorMessage(error),
+          errors: error.format(),
         })
       }
 
       throw error
     }
   } catch (error: unknown) {
-    // Check by constructor name and message since instanceof doesn't work reliably
-    // with errors from different JavaScript contexts (like undici)
+    // undici raises SyntaxError from another realm, so instanceof misses it
     if (error?.constructor?.name === 'SyntaxError') {
       const errorMessage = (error as any)?.message || ''
 
@@ -266,7 +279,6 @@ async function parseBody<TBodyParams extends z.ZodObject<any>>(
         })
       }
 
-      // Handle other JSON parsing errors
       throw new BadRequestException({
         type: 'invalid_data',
         message: 'Invalid JSON',
@@ -291,6 +303,21 @@ async function getData(request: NextRequest) {
   } catch {
     return { data: await request.clone().json() }
   }
+}
+
+function isZodError(error: unknown): error is ZodError {
+  if (error instanceof ZodError) {
+    return true
+  }
+  if (!error || typeof error !== 'object') {
+    return false
+  }
+  return (
+    'name' in error &&
+    error.name === 'ZodError' &&
+    'issues' in error &&
+    Array.isArray(error.issues)
+  )
 }
 
 function createZodErrorMessage(error: ZodError) {
@@ -324,18 +351,11 @@ async function parseQuery<TQueryParams extends z.ZodObject<any>>(
   try {
     return queryParmas.parse(contextParams)
   } catch (error: unknown) {
-    // Check for ZodError by name and structure since instanceof may fail with different zod versions
-    if (
-      error instanceof ZodError ||
-      (error?.constructor?.name === 'ZodError' &&
-        error &&
-        typeof error === 'object' &&
-        'issues' in error)
-    ) {
+    if (isZodError(error)) {
       throw new NotFoundException({
         type: 'missing_query_param',
-        message: createZodErrorMessage(error as ZodError),
-        errors: (error as ZodError).format(),
+        message: createZodErrorMessage(error),
+        errors: error.format(),
       })
     }
 
@@ -354,18 +374,11 @@ async function parseRouteParams<TRouteParams extends z.ZodObject<any>>(
   try {
     return routeParams.parse(contextParams)
   } catch (error: unknown) {
-    // Check for ZodError by name and structure since instanceof may fail with different zod versions
-    if (
-      error instanceof ZodError ||
-      (error?.constructor?.name === 'ZodError' &&
-        error &&
-        typeof error === 'object' &&
-        'issues' in error)
-    ) {
+    if (isZodError(error)) {
       throw new NotFoundException({
         type: 'missing_route_param',
-        message: createZodErrorMessage(error as ZodError),
-        errors: (error as ZodError).format(),
+        message: createZodErrorMessage(error),
+        errors: error.format(),
       })
     }
 
