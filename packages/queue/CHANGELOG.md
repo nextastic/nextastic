@@ -1,5 +1,12 @@
 # @nextastic/queue
 
+## 2.4.1
+
+### Patch Changes
+
+- 261ea3b: `work()` closes its workers on SIGTERM and SIGINT: it takes no new
+  jobs, lets running jobs finish, then exits.
+
 ## 2.4.0
 
 ### Minor Changes
