@@ -14,13 +14,14 @@ interface WorkParams {
 export async function work(params: WorkParams) {
   const { queues, jobsDir } = params
   const jobs = await getJobs(jobsDir)
+  const workers: Worker[] = []
 
   for (const queue of queues) {
     const connection = new Redis(config.redis.host, {
       maxRetriesPerRequest: null,
     })
 
-    new Worker(
+    const worker: Worker = new Worker(
       queue.name,
       async (job: BullMQJob) => {
         logger.debug(`got job: ${job.name}`, {
@@ -90,8 +91,24 @@ export async function work(params: WorkParams) {
         lockDuration: config.queue.jobTimeoutMs,
       },
     ) as any
+    workers.push(worker)
 
     // eslint-disable-next-line no-console
     console.log(`Worker running jobs on "${queue.name}".`)
   }
+
+  closeOnStopSignal(workers)
+}
+
+// A deploy stops the old process with SIGTERM. Closing takes no new jobs and
+// lets running ones finish, so a job is not cut off halfway.
+function closeOnStopSignal(workers: Worker[]) {
+  const close = async (signal: NodeJS.Signals) => {
+    // eslint-disable-next-line no-console
+    console.log(`${signal}: closing workers after their running jobs.`)
+    await Promise.all(workers.map((worker) => worker.close()))
+    process.exit(0)
+  }
+  process.once('SIGTERM', close)
+  process.once('SIGINT', close)
 }
