@@ -179,12 +179,14 @@ async function putBackUnknownJob(job: BullMQJob, token: string | undefined) {
   const runnableSince = job.timestamp + (job.opts.delay ?? 0)
   if (Date.now() - runnableSince > unknownJobGiveUpMs) {
     throw new UnrecoverableError(
-      `No job named "${job.name}" in any version that ran it in 15 minutes.`,
+      `No job named "${job.name}" in any version that ran it in ${unknownJobGiveUpMs / 60_000} minutes.`,
     )
   }
 
   // eslint-disable-next-line no-console
-  console.warn(`No job named "${job.name}" in this version: it waits 15 seconds for a new one.`)
+  console.warn(
+    `No job named "${job.name}" in this version: it waits ${unknownJobRetryMs / 1000} seconds for a new one.`,
+  )
   await job.moveToDelayed(Date.now() + unknownJobRetryMs, token)
   throw new DelayedError()
 }
@@ -194,7 +196,7 @@ async function putBackUnknownJob(job: BullMQJob, token: string | undefined) {
 async function runUntilCancelled<T>(run: Promise<T>, signal: AbortSignal) {
   let deadlineTimer: NodeJS.Timeout | undefined
   const deadlineError = new UnrecoverableError(
-    'Cancelled: the job did not stop within 60 seconds and was ended.',
+    `Cancelled: the job did not stop within ${cancelDeadlineMs / 1000} seconds and was ended.`,
   )
   const deadline = new Promise<never>((_resolve, reject) => {
     signal.addEventListener(
