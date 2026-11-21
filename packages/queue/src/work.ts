@@ -7,7 +7,7 @@ import { Queue } from './types'
 import { config } from '@nextastic/config'
 import { logger } from '@nextastic/logger'
 import { jobContext, RunningJob } from './job-context'
-import { captureJobLines, SendJobLog, sendLineOfJob } from './capture-job-lines'
+import { captureJobLines } from './capture-job-lines'
 import { startHeartbeat } from './start-heartbeat'
 import { startSuperbullConnector } from './start-superbull-connector'
 
@@ -26,7 +26,6 @@ export async function work(params: WorkParams) {
   const { queues, jobsDir } = params
   const jobs = await getJobs(jobsDir)
   const runningJobs = new Map<string, AbortController>()
-  let sendJobLog: SendJobLog | null = null
   const workerQueues: Array<{ worker: Worker; connection: Redis }> = []
 
   for (const queue of queues) {
@@ -38,9 +37,9 @@ export async function work(params: WorkParams) {
       queue.name,
       async (job: BullMQJob, token?: string) => {
         const runningJob: RunningJob = {
-          id: String(job.id),
-          name: job.name,
-          queue: queue.name,
+          queueName: queue.name,
+          jobId: String(job.id),
+          jobName: job.name,
           attempt: job.attemptsMade + 1,
         }
         const runningJobKey = `${queue.name}:${job.id}`
@@ -54,7 +53,7 @@ export async function work(params: WorkParams) {
               definedJob: jobs[job.name],
               signal: abortController.signal,
               sendLog: (message) =>
-                sendLineOfJob({ job: runningJob, level: 'info', message, sendJobLog }),
+                connector?.sendJobLog({ ...runningJob, level: 'info', message }),
             }),
           )
         } finally {
@@ -72,12 +71,11 @@ export async function work(params: WorkParams) {
           count: config.queue.maxFailedJobs,
         },
         lockDuration: config.queue.jobTimeoutMs,
+        // The connector starts first, so every job's lines can reach it.
+        autorun: false,
       },
     ) as any
     workerQueues.push({ worker, connection })
-
-    // eslint-disable-next-line no-console
-    console.log(`Worker running jobs on "${queue.name}".`)
   }
 
   const workers = workerQueues.map(({ worker }) => worker)
@@ -92,8 +90,17 @@ export async function work(params: WorkParams) {
       return true
     },
   })
-  sendJobLog = connector?.sendJobLog ?? null
-  captureJobLines(sendJobLog)
+  captureJobLines(connector?.sendJobLog ?? null)
+
+  for (const worker of workers) {
+    worker.run().catch((error: unknown) => {
+      // eslint-disable-next-line no-console
+      console.error(`Worker on "${worker.name}" stopped: ${String(error)}`)
+    })
+    // eslint-disable-next-line no-console
+    console.log(`Worker running jobs on "${worker.name}".`)
+  }
+
   startHeartbeat(workerQueues).catch((error: unknown) => {
     // eslint-disable-next-line no-console
     console.warn(`Heartbeat did not start: ${String(error)}`)

@@ -4,14 +4,9 @@ import { jobContext, RunningJob } from './job-context'
 
 export type JobLogLevel = 'debug' | 'info' | 'warn' | 'error'
 
-export type SendJobLog = (line: {
-  queueName: string
-  jobId: string
-  jobName: string
-  attempt: number
-  level: JobLogLevel
-  message: string
-}) => void
+export type SendJobLog = (
+  line: RunningJob & { level: JobLogLevel; message: string },
+) => void
 
 const consoleLevels = {
   debug: 'debug',
@@ -30,28 +25,11 @@ export function captureJobLines(sendJobLog: SendJobLog | null) {
 
 export function getJobFields(job: RunningJob) {
   return {
-    job_id: job.id,
-    job_name: job.name,
-    queue: job.queue,
+    job_id: job.jobId,
+    job_name: job.jobName,
+    queue: job.queueName,
     attempt: job.attempt,
   }
-}
-
-export function sendLineOfJob(args: {
-  job: RunningJob
-  level: JobLogLevel
-  message: string
-  sendJobLog: SendJobLog | null
-}) {
-  const { job, level, message, sendJobLog } = args
-  sendJobLog?.({
-    queueName: job.queue,
-    jobId: job.id,
-    jobName: job.name,
-    attempt: job.attempt,
-    level,
-    message,
-  })
 }
 
 function captureConsole(sendJobLog: SendJobLog | null) {
@@ -74,7 +52,7 @@ function captureConsole(sendJobLog: SendJobLog | null) {
       original(JSON.stringify({ level, message, ...getJobFields(job) }))
       isSending = true
       try {
-        sendLineOfJob({ job, level, message, sendJobLog })
+        sendJobLog?.({ ...job, level, message })
       } finally {
         isSending = false
       }
@@ -95,11 +73,10 @@ function captureLogger(sendJobLog: SendJobLog | null) {
       // log() sends its own line; its debug copy is not sent twice.
       const isFromJobLog = info.event === 'job.log'
       if (!isFromJobLog && logger.isLevelEnabled(info.level)) {
-        sendLineOfJob({
-          job,
+        sendJobLog?.({
+          ...job,
           level: getJobLogLevel(info.level),
           message: String(info.message),
-          sendJobLog,
         })
       }
       return originalFormat.transform(

@@ -1,9 +1,9 @@
 import { AsyncLocalStorage } from 'node:async_hooks'
 
 export interface RunningJob {
-  id: string
-  name: string
-  queue: string
+  queueName: string
+  jobId: string
+  jobName: string
   attempt: number
 }
 
