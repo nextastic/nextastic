@@ -8,8 +8,8 @@
   `log()`, the logger and `console` inside a job carry these fields.
 - With `QUEUE_RUNNER_HEARTBEAT_URL` set, the worker posts a heartbeat every 20
   seconds, the first one once every queue's worker can take jobs.
-- With `SUPERBULL_TOKEN` set and `@superbull/connector` installed (an optional
-  peer dependency), the connector starts inside the worker and sends each job,
+- With `SUPERBULL_TOKEN` set and `@superbull/connector` installed in the app,
+  the connector starts inside the worker and sends each job,
   its lines, queue counts and worker numbers to Superbull. Without it, or with
   a wrong token, the worker runs as before.
 - A job whose name the worker does not know goes back with a wait of 15

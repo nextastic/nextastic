@@ -54,13 +54,5 @@
     "express-basic-auth": "^1.2.1",
     "ioredis": "^5.3.2",
     "minimist": "^1.2.8"
-  },
-  "peerDependencies": {
-    "@superbull/connector": "*"
-  },
-  "peerDependenciesMeta": {
-    "@superbull/connector": {
-      "optional": true
-    }
   }
 }

@@ -22,8 +22,8 @@ interface SuperbullConnectorModule {
   }): WorkerConnector
 }
 
-// @superbull/connector is an optional peer dependency: without it, or without
-// a token, the worker runs as before.
+// The app installs @superbull/connector itself: without it, or without a
+// token, the worker runs as before.
 export async function startSuperbullConnector(args: {
   workers: Worker[]
   cancelJob: CancelJob
