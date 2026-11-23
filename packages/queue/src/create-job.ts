@@ -33,6 +33,9 @@ export function createJob<TData, JReturnData>(
     id: params.id,
     handle: async (payload: TData, context: JobContext) => {
       const abortController = new AbortController()
+      context.signal?.addEventListener('abort', () => abortController.abort(), {
+        once: true,
+      })
       const jobHandleContext: JobContext = {
         ...context,
         signal: abortController.signal,
@@ -45,6 +48,7 @@ export function createJob<TData, JReturnData>(
 
       return new Promise(async (resolve, reject) => {
         let isResolved = false
+        let isTimedOut = false
         const timeoutError = new JobExceededTimeoutException(
           `Job ${params.id} exceeded timeout of ${timeoutSecs} seconds`,
           payload,
@@ -56,6 +60,7 @@ export function createJob<TData, JReturnData>(
             return
           }
 
+          isTimedOut = true
           abortController.abort()
           reject(timeoutError)
         }, timeoutSecs * 1000)
@@ -64,7 +69,7 @@ export function createJob<TData, JReturnData>(
           const result = await params.handle(payload, jobHandleContext)
           isResolved = true
 
-          if (abortController.signal.aborted) {
+          if (isTimedOut) {
             reject(timeoutError)
             return
           }
@@ -78,7 +83,7 @@ export function createJob<TData, JReturnData>(
           if (
             error instanceof Error &&
             error.name === 'AbortError' &&
-            abortController.signal.aborted
+            isTimedOut
           ) {
             return
           }
